@@ -533,8 +533,8 @@ function openDrawer(i){dI=i;const p=P[i];
   $('#dModules').innerHTML=p.modules.map(m=>`<span>${esc(m)}</span>`).join('');
   $('#dRoles').innerHTML=p.roles.map(m=>`<span>${esc(m)}</span>`).join('');
   $('#dNew').href=p.url;
-  $('#drawer').classList.add('on');$('#scrim').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('.db').scrollTop=0;document.body.style.overflow='hidden';}
-function closeDrawer(){$('#drawer').classList.remove('on');$('#scrim').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');if(cur<0)document.body.style.overflow='';}
+  $('#drawer').classList.add('on');$('#scrim').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('.db').scrollTop=0;}
+function closeDrawer(){$('#drawer').classList.remove('on');$('#scrim').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');}
 $('#dClose').onclick=closeDrawer;$('#scrim').onclick=closeDrawer;$('#dLaunch').onclick=()=>{closeDrawer();launch(dI);};
 
 /* Presenter */
