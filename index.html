@@ -430,7 +430,7 @@ const playI='<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M8 
 function thumb(p,i){
   const media=p.img?`<img src="${p.img}" alt="${esc(p.n)} screenshot" loading="lazy">`
     :`<div class="live-frame"><iframe data-src="${p.url}" tabindex="-1" aria-hidden="true"></iframe></div>`;
-  return `<div class="thumb" data-launch="${i}"><div class="frame"><div class="chrome"><i></i><i></i><i></i></div>${media}</div><div class="play"><span>${playI}Launch demo</span></div></div>`;
+  return `<div class="thumb" data-launch="${i}"><div class="frame"><div class="chrome"><i></i><i></i><i></i></div>${media}</div><div class="play"><span>${playI}Open solution</span></div></div>`;
 }
 function render(){
   $('#grid').innerHTML=P.map((p,i)=>`
@@ -495,7 +495,7 @@ function launch(i){i=(i+P.length)%P.length;cur=i;const p=P[i];
   $('#vCount').textContent=`${i+1} / ${P.length}`;$('#vOpen').href=p.url;
   $('#loaderTxt').textContent=`Loading ${p.n}…`;loader.classList.remove('off');frame.src=p.url;
   $('#viewer').classList.add('on');$('#viewer').setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
-  try{history.replaceState(null,'','#demo/'+p.id);}catch(e){}}
+  try{history.replaceState(null,'','#solution/'+p.id);}catch(e){}}
 function closeViewer(){$('#viewer').classList.remove('on');$('#viewer').setAttribute('aria-hidden','true');document.body.style.overflow='';cur=-1;
   setTimeout(()=>{if(cur<0)frame.src='about:blank';},250);if(document.fullscreenElement)document.exitFullscreen();
   try{history.replaceState(null,'',location.pathname);}catch(e){}}
@@ -511,7 +511,7 @@ document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,sele
   if(e.key==='Escape'){$('#drawer').classList.contains('on')?closeDrawer():on&&closeViewer();}
   else if(on&&e.key==='ArrowRight')launch(cur+1);else if(on&&e.key==='ArrowLeft')launch(cur-1);
   else if(/^[1-5]$/.test(e.key)&&!e.ctrlKey&&!e.metaKey&&!e.altKey)launch(+e.key-1);});
-const m=location.hash.match(/^#demo\/(.+)$/);if(m){const i=P.findIndex(p=>p.id===m[1]);if(i>=0)launch(i);}
+const m=location.hash.match(/^#(?:solution|demo)\/(.+)$/);if(m){const i=P.findIndex(p=>p.id===m[1]);if(i>=0)launch(i);}
 
 let tt;function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('on'),3000);}
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.1});
