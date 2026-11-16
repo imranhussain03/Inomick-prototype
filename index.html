@@ -157,10 +157,13 @@ footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
 .dh h3{font-size:24px;font-weight:800;letter-spacing:-.02em;color:var(--g950);margin-top:10px}
 .dh .full{font-size:14px;color:var(--g600);font-weight:600}
 .dh q{display:block;margin-top:12px;font-size:14.5px;color:var(--ink-2);font-style:italic}
-.db{padding:24px 28px;overflow:auto;flex:1}
+.db{padding:24px 28px;overflow-y:auto;flex:1 1 auto;min-height:0;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .db h5{font-size:11.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:14px}
 .db .blk{margin-bottom:28px}
 .db .blk>p{font-size:14.5px;color:var(--ink-2)}
+.caps{list-style:none;display:grid;gap:9px}
+.caps li{position:relative;padding-left:24px;font-size:14px;color:var(--ink-2);line-height:1.5}
+.caps li::before{content:"";position:absolute;left:4px;top:8px;width:7px;height:7px;border-radius:50%;background:var(--g600)}
 .flow{list-style:none}
 .flow li{position:relative;padding:0 0 16px 38px;font-size:14px;font-weight:600;color:var(--ink)}
 .flow li::before{content:attr(data-n);position:absolute;left:0;top:-1px;width:24px;height:24px;border-radius:50%;background:var(--g600);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center}
@@ -339,6 +342,7 @@ footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
   </div>
   <div class="db">
     <div class="blk"><h5>Business challenge</h5><p id="dProblem"></p></div>
+    <div class="blk"><h5>Key capabilities</h5><ul class="caps" id="dCaps"></ul></div>
     <div class="blk"><h5>Approval workflow</h5><ol class="flow" id="dFlow"></ol></div>
     <div class="blk"><h5>Key modules</h5><div class="tags" id="dModules"></div></div>
     <div class="blk"><h5>User roles</h5><div class="tags" id="dRoles"></div></div>
@@ -380,45 +384,90 @@ footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
 
 <script>
 const P=[
- {id:"clinipack",n:"CliniPack",full:"Clinical Package Costing & Pricing",domain:"Healthcare",url:"cpt-imran.html",img:"assets/clinipack.jpg",
+ {id:"clinipack",n:"CliniPack",full:"Clinical Package Costing & Pricing",domain:"Healthcare",url:"CliniPack.html",img:"assets/clinipack.jpg",
   quote:"Advance care. Understand cost. Price with confidence.",
   desc:"Converts a physician's request into an approved, costed and priced clinical package, with sequential sign-off from clinical, nursing and finance leadership.",
   problem:"Clinical package pricing relied on spreadsheets and email chains, with no SLA visibility. CliniPack consolidates costing, clinical validation and financial approval into a single, fully tracked workflow.",
-  hl:["11-stage clinical-to-finance approval with SLAs","CMIO delegation and cross-branch review","Nursing templates, costing and CFO sign-off"],
-  flow:[["Doctor Request","SLA 3 days"],["CMO Approval","SLA 1 day"],["CMIO Validation","Delegation supported"],["Nursing Templates","SLA 6 days"],["CNO Approval","SLA 5 days"],["Chief Surgeon","SLA 2 days"],["CMO Final","SLA 2 days"],["Other Branch CNO / CMO","Cross-branch review"],["CFO Approval","Financial sign-off"],["CSCM Confirmation","Updated on PrimeCare"]],
-  modules:["My Tasks","Dashboard","Package Requests","Costing","Nursing Templates","Edit Requests","Notifications"],
-  roles:["Doctor","CMO","CMIO","Nurse Manager","CNO","Chief Surgeon","CFO","CSCM"]},
+  hl:["Multi-stage clinical-to-finance approval with SLAs","CMIO delegation and cross-branch review","Costing, CEO price review and PrimeCare setup"],
+  caps:["Physician requests with proposed CPT code, specialty, anaesthesia, duration and suggested price",
+   "Clinical approval by CMO, CMIO, CNO and Chief Surgeon, with nursing templates",
+   "Cross-branch review by the other branch's CNO and CMO",
+   "Full cost build-up covering manpower, consumables and drugs, machines and devices, accommodation and CAP limit",
+   "CFO financial review (FCD) and CEO approval of the patient price",
+   "CSCM system setup and template linking on PrimeCare, with PKGID and operation code",
+   "Duplicate CPT detection with CFO and CMO acknowledgement",
+   "Delegates and cover approvers from Active Directory, with SLA tracking at every stage",
+   "Edit, modification and deactivation requests on approved packages, with version control",
+   "Data import, notifications and guided walkthroughs"],
+  flow:[["Physician Request","Proposed CPT and pricing"],["CMO Approval","Branch CMO"],["CMIO Validation","Delegation supported"],["Nursing Templates","Nurse Manager"],["CNO Approval","Nursing sign-off"],["Chief Surgeon","Clinical review"],["CMO Final","Final clinical approval"],["Other Branch CNO / CMO","Cross-branch review"],["CFO Financials (FCD)","Cost review"],["CEO Price Review","Patient price approved"],["CSCM & CFO Setup","Configured on PrimeCare"],["CFO Acknowledgement","Package active"]],
+  modules:["My Tasks","Dashboard","All Requests","New Procedure","Approved Packages","Edit Requests","Data Import","Notifications","Setup"],
+  roles:["Physician","CMO","CMIO","Nurse Manager","CNO","Chief Surgeon","CFO","CEO","CSCM Manager","Delegates"]},
  {id:"itemsure",n:"ItemSure",full:"Item Evaluation & Item Master",domain:"Supply Chain",url:"ItemSure_Prototype.html",img:"assets/itemsure.jpg",
   quote:"Evaluate thoroughly. Select confidently.",
   desc:"Supply chain initiates each item evaluation, department heads assign evaluators, end users assess the item, and an evaluation certificate is issued on completion.",
   problem:"Product evaluations were tracked manually, with limited visibility of evaluator assignments. ItemSure provides every item with a traceable, certified evaluation lifecycle.",
-  hl:["CSCM-led evaluation lifecycle with SLAs","Department head and end-user evaluation","Supplier performance, tenders and data import"],
-  flow:[["Evaluation Initiated","By CSCM"],["Department Head Assignment","Evaluators assigned"],["End User Review","Hands-on evaluation"],["CSCM Review","Score consolidation"],["Evaluation Certificate","Item approved"]],
-  modules:["My Tasks","Dashboard","All Evaluations","Supplier Change","Sustainability","Supplier Performance","Data Import","Tenders"],
-  roles:["CSCM","Purchasing Officer","Department Head","Evaluator","End User","Administrator"]},
+  hl:["CSCM-led evaluation lifecycle with SLAs","Tenders, supplier change and supplier performance","Evaluation certificates and sustainability insights"],
+  caps:["CSCM-initiated evaluations with item type, brand, SIC, GP number and country of origin",
+   "Department heads assign end-user evaluators, including physicians, nurses, pharmacists, technicians and therapists",
+   "Structured scoring on effectiveness, ease of use, quality, pricing and cost benefit, risk, logistics and supplier reputation",
+   "Speciality officer review and CSCM consolidation leading to a final verdict",
+   "Evaluation certificate on approval, plus re-evaluation of earlier items",
+   "Tender management, with items imported in bulk, routed individually and the tender closed after the final verdict",
+   "Supplier change requests with justification and approval",
+   "Supplier performance tracking and sustainability analytics",
+   "Data import, SLA reminders, notifications and how-to guides"],
+  flow:[["Request Initiation","By CSCM"],["Department Head Assignment","Evaluators assigned"],["End-User Evaluation","Scored assessment"],["Speciality Review","Purview check"],["CSCM Consolidation","Scores reviewed"],["Final Verdict","Evaluation certificate issued"]],
+  modules:["My Tasks","Dashboard","All Evaluations","New Evaluation","Tenders","Supplier Change","Supplier Performance","Sustainability","Data Import","Notifications","Setup"],
+  roles:["CSCM","Department Head","Speciality Officer","End User (Evaluator)","Purchasing Officer","Administrator"]},
  {id:"cms",n:"CMS",full:"Contract Management System",domain:"Legal & Procurement",url:"CMS.html",img:"assets/cms.jpg",
   quote:"Contracts from request to renewal, under control.",
   desc:"Manages the complete contract lifecycle, including request letters, template-based drafting, vendor management, multi-level approvals, amendments and renewals.",
   problem:"Contracts were stored across disparate folders and renewals were frequently missed. CMS tracks every contract, vendor and approval, and flags anything expiring or delayed.",
-  hl:["Request letters and template-based drafting","Approval routing with request-for-change cycle","Expiry alerts, amendments and renewals"],
-  flow:[["Contract Request","Request letter"],["Draft","Template-based"],["In Approval","Department Head to CEO"],["Request for Change","Revise and resubmit"],["Executed","Amendments and renewals tracked"]],
-  modules:["Statistics","Requests","Contracts","Approvals","Templates","Notifications","Contract Import"],
-  roles:["Requester","Department Head","Legal Counsel","CEO","Site Admin"]},
+  hl:["Request letters and bilingual template drafting","Sequential or parallel approval chains","Expiry alerts, amendments, renewals and import"],
+  caps:["Contract request letters with budget status, procurement mode (competitive bidding or single source) and recommended vendor",
+   "Template-based drafting, including bilingual English and Arabic service, purchase, construction and supply contracts",
+   "Online draft editing with comments and version history",
+   "Sequential or parallel approval chains covering Department Head, Legal, Finance, Procurement, IT and CEO",
+   "Request-for-change cycle and a digital approval certificate",
+   "Amendments, extensions, renewals and cancellations, tracked with addendums",
+   "Notice-period and expiry alerts",
+   "Statistics on contract value, vendor concentration, activity trends and draft ageing",
+   "Excel contract import with validation and error reporting"],
+  flow:[["Contract Request","Request letter and vendor"],["Draft","Template-based, English / Arabic"],["Approval Chain","Sequential or parallel"],["Request for Change","Revise and resubmit"],["Signed & Executed","Legal signed contract"],["Amend / Renew / Close","Addendums tracked"]],
+  modules:["Statistics","Requests","Contracts","Approvals","Templates","Contract Import","Notifications"],
+  roles:["Requester","Department Head","Legal","Finance","Procurement","CEO","Site Admin"]},
  {id:"itams",n:"ITAMS",full:"IT Asset Transfer Management",domain:"IT Operations",url:"Innomick_ITAMS_v5.html",img:"assets/itams.jpg",
   quote:"Every device, every transfer, fully accounted for.",
   desc:"Governs IT asset requests, transfers and replacements across branches, with every manager, supervisor and delivery step fully tracked.",
   problem:"Asset movements between employees and branches were informal and difficult to audit. ITAMS converts every request, exchange and handover into an approved, confirmed transaction.",
-  hl:["New, transfer and replacement requests","Manager → Supervisor → Delivery → Confirm","Branch-aware routing, alerts and export"],
-  flow:[["Create Request","New, transfer or exchange"],["Pending Manager","Line-manager approval"],["Pending Supervisor","IT Supervisor review"],["Pending Delivery","IT Service Desk"],["Pending Confirmation","Employee confirms receipt"],["Completed","Asset register updated"]],
+  hl:["New asset and replacement / exchange requests","Manager → Supervisor → Delivery → Confirm","Asset details with serial number and RFID"],
+  caps:["New asset and replacement or exchange requests across branches and departments",
+   "IT Manager approval, followed by IT Supervisor approval where the branch requires it",
+   "Technician capture of asset details: model, serial number and RFID / asset ID",
+   "Delivery by the IT Service Desk, then email confirmation of receipt by the employee",
+   "Complete audit trail and history on every request",
+   "Due dates, reminders and notifications",
+   "Dashboard with search, filters and export",
+   "Setup of branches, departments and equipment types"],
+  flow:[["Create Request","New or replacement"],["Pending Manager","IT Manager approval"],["Pending Details","Model, serial and RFID captured"],["Pending Supervisor","IT Supervisor review"],["Pending Delivery","IT Service Desk"],["Pending Confirmation","Employee confirms receipt"],["Completed","Asset register updated"]],
   modules:["Dashboard","Create Request","My Requests","Setup","Notifications","Export"],
-  roles:["IT Technician","IT Manager","IT Supervisor","Administrator"]},
+  roles:["IT Technician","IT Manager","IT Supervisor","Administrator","Requestor"]},
  {id:"dms",n:"Innomick DMS",full:"Document Management System",domain:"Governance",url:"DMS_Prototype.html",img:"assets/dms.jpg",
   quote:"Every document secured, versioned and approved.",
   desc:"A SharePoint-based document hub with upload and approval workflows, version history, secure sharing, expiry tracking and a Copilot assistant.",
   problem:"Documents were dispersed across drives and inboxes, with no approval trail or access control. The DMS organises them by department, with governed workflows and permissions.",
   hl:["Individual and group approval workflows","Versioning, secure sharing, expiry alerts","Built-in Copilot on Microsoft 365"],
-  flow:[["Upload Document","3-step guided upload"],["Create Workflow","Individual or group"],["Reviewer Assignment","Assigned approvers"],["Review & Decision","Approve, reject or request edits"],["Published","Versioned with access control"]],
-  modules:["My Approvals","My Files","My Departments","Shared Files","Categories","Expiring Files","Version History","Recycle Bin","Copilot"],
+  caps:["Guided document upload with category, sub-category and metadata",
+   "Department and branch libraries, organised across the organisation",
+   "Individual and group approval workflows, with reusable workflow templates",
+   "Review decisions: approve, reject, request edits or return with comments",
+   "Version history with restore",
+   "File permissions (view or edit) and secure sharing",
+   "Expiring-document tracking and alerts",
+   "Favourites, shared files and recycle bin",
+   "Copilot AI assistant"],
+  flow:[["Upload Document","Guided upload with metadata"],["Create Workflow","Individual or group"],["Reviewer Assignment","Assigned approvers"],["Review & Decision","Approve, reject or request edits"],["Published","Versioned with access control"]],
+  modules:["Home","My Approvals","My Favorites","My Files","My Departments","My Organization","Shared Files","Categories","Expiring Files","Recycle Bin","Copilot"],
   roles:["Intranet Admin","Department Member","Reviewer","Approver","Executive"]}
 ];
 
@@ -479,12 +528,13 @@ let dI=0;
 function openDrawer(i){dI=i;const p=P[i];
   $('#dMeta').innerHTML=`<span class="n">0${i+1}</span><span class="dot"></span><span>${esc(p.domain)}</span>${p.live?'<span class="cloud">Live on cloud</span>':''}`;
   $('#dTitle').textContent=p.n;$('#dFull').textContent=p.full;$('#dQuote').textContent=p.quote;$('#dProblem').textContent=p.problem;
+  $('#dCaps').innerHTML=p.caps.map(c=>`<li>${esc(c)}</li>`).join('');
   $('#dFlow').innerHTML=p.flow.map((s,k)=>`<li data-n="${k+1}">${esc(s[0])}<small>${esc(s[1])}</small></li>`).join('');
   $('#dModules').innerHTML=p.modules.map(m=>`<span>${esc(m)}</span>`).join('');
   $('#dRoles').innerHTML=p.roles.map(m=>`<span>${esc(m)}</span>`).join('');
   $('#dNew').href=p.url;
-  $('#drawer').classList.add('on');$('#scrim').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');}
-function closeDrawer(){$('#drawer').classList.remove('on');$('#scrim').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');}
+  $('#drawer').classList.add('on');$('#scrim').classList.add('on');$('#drawer').setAttribute('aria-hidden','false');$('.db').scrollTop=0;document.body.style.overflow='hidden';}
+function closeDrawer(){$('#drawer').classList.remove('on');$('#scrim').classList.remove('on');$('#drawer').setAttribute('aria-hidden','true');if(cur<0)document.body.style.overflow='';}
 $('#dClose').onclick=closeDrawer;$('#scrim').onclick=closeDrawer;$('#dLaunch').onclick=()=>{closeDrawer();launch(dI);};
 
 /* Presenter */
