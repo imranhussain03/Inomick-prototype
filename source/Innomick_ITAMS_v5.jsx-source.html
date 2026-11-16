@@ -334,7 +334,10 @@ function demoValueFor(el){
 }
 function setNativeValue(el,v){const proto=el.tagName==="TEXTAREA"?HTMLTextAreaElement.prototype:HTMLInputElement.prototype;Object.getOwnPropertyDescriptor(proto,"value").set.call(el,v);el.dispatchEvent(new Event("input",{bubbles:true}));}
 // Components register a handler for the bottom "Auto Fill" button; handler returns true if it filled something.
-function useDemoAutofill(handler){const ref=useRef(handler);ref.current=handler;useEffect(()=>{const h=e=>{if(ref.current&&ref.current()!==false)e.detail.handled=true;};window.addEventListener("demo-autofill",h);return()=>window.removeEventListener("demo-autofill",h);},[]);}
+// Tracks how many on-screen forms support Auto Fill, so the button only shows where it is useful.
+const AF={n:0,subs:new Set(),add(d){this.n+=d;this.subs.forEach(f=>f(this.n));}};
+function useAutofillAvailable(){const [n,setN]=useState(AF.n);useEffect(()=>{AF.subs.add(setN);setN(AF.n);return()=>{AF.subs.delete(setN);};},[]);return n>0;}
+function useDemoAutofill(handler,active=true){useEffect(()=>{if(!active)return;AF.add(1);return()=>AF.add(-1);},[active]);const ref=useRef(handler);ref.current=handler;useEffect(()=>{const h=e=>{if(ref.current&&ref.current()!==false)e.detail.handled=true;};window.addEventListener("demo-autofill",h);return()=>window.removeEventListener("demo-autofill",h);},[]);}
 
 // ─────────────────────────── REQUEST TABLE ───────────────────────────
 function RequestTable({rows,onOpen,sort,onSort,showTechnician,masters,emptyLabel}){
@@ -654,7 +657,9 @@ function ActionPanel({rec,user,onAction,onRemind,onEdit,onFill}){
   const lastRem=rec.timeline.filter(e=>e.action==="manual_reminder").sort((a,b)=>b.actionDate.localeCompare(a.actionDate))[0];
   const waiting=WAITING_ON[rec.status]||"the current approver";
   const act=a=>{onAction(a,comment);setComment("");};
-  useDemoAutofill(()=>{if(!document.querySelector(".actionCard textarea"))return false;setComment(c=>c.trim()?c:pickOne(DEMO_COMMENTS));});
+  const [hasCommentBox,setHasCommentBox]=useState(false);
+  useEffect(()=>{setHasCommentBox(!!document.querySelector(".actionCard textarea"));});
+  useDemoAutofill(()=>{if(!document.querySelector(".actionCard textarea"))return false;setComment(c=>c.trim()?c:pickOne(DEMO_COMMENTS));},hasCommentBox);
   const Card=ActCard;
   const Comment=({label,ph})=><div style={{marginBottom:12}}><label className="fieldLabel">{label}</label><textarea className="textarea" value={comment} onChange={e=>setComment(e.target.value)} placeholder={ph}/></div>;
   return <section>
@@ -816,7 +821,7 @@ function Setup({user,masters,setMasters,onToast}){
       :m[tab].map(x=>x.id===panel.item.id?{...x,...form,title:form.title.trim(),modifiedBy:user.name,modifiedAt:now}:x)}));
     setPanel(null);onToast("Changes saved.","success");
   };
-  useDemoAutofill(()=>{if(!panel)return false;const used=new Set(masters[tab].map(x=>x.title.toLowerCase()));const t=DEMO_TYPES.find(x=>!used.has(x.toLowerCase()))||`Demo Item ${rnd(900)+100}`;setForm(f=>({...f,title:(f.title||"").trim()||t,code:cfg.hasCode?((f.code||"").trim()||"IN"+t.slice(0,2).toUpperCase()):f.code}));setFerr();});
+  useDemoAutofill(()=>{if(!panel)return false;const used=new Set(masters[tab].map(x=>x.title.toLowerCase()));const t=DEMO_TYPES.find(x=>!used.has(x.toLowerCase()))||`Demo Item ${rnd(900)+100}`;setForm(f=>({...f,title:(f.title||"").trim()||t,code:cfg.hasCode?((f.code||"").trim()||"IN"+t.slice(0,2).toUpperCase()):f.code}));setFerr();},!!panel);
   const doDelete=()=>{setMasters(m=>({...m,[tab]:m[tab].filter(x=>x.id!==del.id)}));onToast(`"${del.title}" deleted.`,"success");setDel(null);};
   const cols=1+(cfg.hasCode?1:0)+(cfg.hasBranch?1:0)+(cfg.hasSortOrder?1:0)+(cfg.hasIsActive?1:0)+3;
   const th={cursor:"default"};
@@ -980,6 +985,7 @@ function App(){
       if(el.disabled||el.readOnly||el.value||el.closest(".filterSearch,.pp,.spSearch"))return;if(el instanceof HTMLInputElement&&!["text",""].includes(el.type))return;
       const v=demoValueFor(el);if(v)setNativeValue(el,v);};
     document.addEventListener("focusin",h);return()=>document.removeEventListener("focusin",h);},[]);
+  const autofillAvailable=useAutofillAvailable();
   const autoFillPage=()=>{const evt=new CustomEvent("demo-autofill",{detail:{handled:false}});window.dispatchEvent(evt);
     if(evt.detail.handled)showToast("Form auto-filled with demo data.");else showToast("No form on this page to fill.","error");};
 
@@ -1061,7 +1067,7 @@ function App(){
     </div>
     </div></div>
     {/* DEMO: fill the whole form on the current page in one click */}
-    <button type="button" className="demoFab" onClick={autoFillPage} title="Fill every field of the form on this page with demo data"><I.clip size={16}/> Auto Fill</button>
+    {autofillAvailable&&<button type="button" className="demoFab" onClick={autoFillPage} title="Fill every field of the form on this page with demo data"><I.clip size={16}/> Auto Fill</button>}
   </div>;
 }
 ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
