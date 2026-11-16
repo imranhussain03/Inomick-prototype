@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Innomick Technology — IT Asset Transfer Management System</title>
+<style>
+/* No global border-box: SharePoint leaves divs as content-box (only buttons/selects/inputs are border-box), and the dev layout depends on it. */
+*{margin:0;padding:0;}
+.spSuite *,.pp,.pp *,.panel,.panel *,.dlg,.dlg *,.pickerMenu *,.msgInfo,.msgErr{box-sizing:border-box;}
+html,body,#root{width:100%;height:100%;}
+body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px;background:#fff;overflow:hidden;}
+input,select,textarea,button{font-family:inherit;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
+@keyframes panelIn{from{transform:translateX(100%);}to{transform:translateX(0);}}
+@keyframes spin{to{transform:rotate(360deg);}}
+/* ── Dev build stylesheet (extracted verbatim from asset-movement-web-part) ── */
+:root{--ash-primary:#006b5e;--ash-primary-dark:#005549;--ash-primary-light:#e6f5f2;--ash-header-bg:#005c4b;--ash-green:#059669;--ash-green-dark:#047857;--ash-body-bg:#f4f6f8;--ash-card-bg:#fff;--ash-border:#e2e8f0;--ash-border-light:#f1f5f9;--ash-text:#1e293b;--ash-text-sec:#64748b;--ash-text-mut:#94a3b8;--ash-err:#dc2626}.btn{align-items:center;border:1px solid transparent;border-radius:6px;cursor:pointer;display:inline-flex;font-family:Segoe UI,-apple-system,BlinkMacSystemFont,sans-serif;font-size:12.5px;font-weight:600;gap:6px;justify-content:center;line-height:1.4;min-height:36px;padding:8px 16px;transition:all .15s ease;white-space:nowrap}.btn:disabled{cursor:not-allowed;opacity:.5}.btnPrimary{background:var(--ash-primary);color:#fff}.btnPrimary:hover:not(:disabled){background:var(--ash-primary-dark)}.btnGreen{background:var(--ash-green);color:#fff}.btnGreen:hover:not(:disabled){background:var(--ash-green-dark)}.btnGhost{background:#fff;border-color:var(--ash-border);color:var(--ash-text)}.btnGhost:hover:not(:disabled){background:#f8fafc}.btnDanger{background:#fff;border-color:var(--ash-err);color:var(--ash-err)}.btnDanger:hover:not(:disabled){background:#fef2f2}.appRoot{background:var(--ash-body-bg);color:var(--ash-text);display:flex;flex-direction:column;font-family:Segoe UI,-apple-system,BlinkMacSystemFont,sans-serif;height:calc(100vh - 48px);max-width:none;overflow:hidden;width:100%}.topBar{align-items:center;background:var(--ash-header-bg);color:#fff;display:flex;height:48px;justify-content:space-between;padding:0 16px}.subHeader{align-items:center;background:#fff;border-bottom:1px solid var(--ash-border);display:flex;flex:0 0 auto;gap:12px;padding:10px 16px;z-index:40}.layout{display:flex;flex:1 1 auto;min-height:0;overflow:hidden;width:100%}.sidebar{background:#fff;border-right:1px solid var(--ash-border);display:flex;flex:0 0 220px;flex-direction:column;height:100%;overflow-y:auto;width:220px}.sidebarFooter{border-top:1px solid var(--ash-border);margin-top:auto;padding:12px 16px}.sidebarFooterName{color:var(--ash-text);font-size:11px;font-weight:600}.sidebarFooterMeta{color:var(--ash-text-mut);font-size:10px}.sidebarCollapsed{display:none}.navItem{background:transparent;border:0;border-left:3px solid transparent;color:var(--ash-text-sec);cursor:pointer;display:block;font-size:14px;font-weight:600;min-height:44px;padding:12px 16px;text-align:left;width:100%}.navItemActive{background:var(--ash-primary-light);border-left-color:var(--ash-primary);color:var(--ash-primary)}.main{flex:1;min-width:0;overflow:auto;padding:20px}.pageTitle{color:var(--ash-text);font-size:22px;font-weight:700;margin:0 0 18px}.card{background:var(--ash-card-bg);border:1px solid var(--ash-border);border-radius:10px;box-shadow:0 1px 2px rgba(15,23,42,.04)}.cardPad{padding:16px}.statsGrid{display:grid;gap:12px;grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:14px}.statTitle{color:var(--ash-text-sec);font-size:13px;font-weight:600}.statValue{color:var(--ash-text);font-size:28px;font-weight:700}.filterRow{align-items:center;display:flex;flex-wrap:wrap;gap:8px}.filterSearch{align-items:center;background:#fff;border:1px solid var(--ash-border);border-radius:6px;display:flex;flex:1 1 220px;min-height:40px;padding:0 12px}.filterSearch input{border:0;color:var(--ash-text);font-size:14px;outline:none;width:100%}.input,.select,.textarea{background:#fff;border:1px solid var(--ash-border);border-radius:6px;box-sizing:border-box;color:var(--ash-text);font-size:13px;min-height:36px;padding:7px 10px;width:100%}.select{min-width:190px}.textarea{min-height:72px;resize:vertical}.label{color:var(--ash-text-sec);display:block;font-size:13px;font-weight:600;margin-bottom:6px}.muted{color:var(--ash-text-mut);font-size:12px}.buttonRow{display:flex;flex-wrap:wrap;gap:8px}.tableWrap{border-bottom-left-radius:10px;border-bottom-right-radius:10px;max-height:calc(100vh - 320px);overflow:auto}.table{border-collapse:collapse;min-width:900px;width:100%}.th{background:#f1f5f9;border-bottom:2px solid var(--ash-border);color:var(--ash-text-sec);cursor:pointer;font-size:12px;font-weight:600;letter-spacing:.02em;line-height:1.4;padding:10px 12px;position:sticky;text-align:left;text-transform:uppercase;top:0;-webkit-user-select:none;-ms-user-select:none;user-select:none;white-space:nowrap;z-index:2}.sortIndicator{color:var(--ash-text-mut);font-size:9px;margin-left:4px}.sortIndicatorActive{color:var(--ash-primary);font-size:9px;margin-left:4px}.td{border-bottom:1px solid var(--ash-border-light);color:var(--ash-text);font-size:14px;padding:12px;white-space:nowrap}.tableRow:hover{background:var(--ash-primary-light)}.mobileList{display:grid;gap:10px;padding:12px}.mobileItem{background:#fff;border:1px solid var(--ash-border);border-radius:10px;min-height:44px;padding:12px}.mobileItemHead{align-items:center;display:flex;justify-content:space-between;margin-bottom:10px}.mobileField{display:grid;gap:2px;margin-bottom:8px}.mobileFieldLabel{color:var(--ash-text-mut);font-size:11px;font-weight:600;text-transform:uppercase}.mobileFieldValue{color:var(--ash-text);font-size:13px}.stepper{margin-bottom:22px}.step,.stepper{align-items:center;display:flex;gap:8px}.step{color:var(--ash-text-mut);flex-direction:column;font-size:12px;font-weight:600;min-width:78px}.stepCircle{align-items:center;background:#fff;border:2px solid var(--ash-border);border-radius:999px;color:var(--ash-text-mut);display:flex;font-size:13px;font-weight:700;height:40px;justify-content:center;width:40px}.stepActive{color:var(--ash-primary)}.stepActive .stepCircle,.stepDone .stepCircle{background:var(--ash-primary-light);border-color:var(--ash-primary);color:var(--ash-primary)}.stepDone{color:var(--ash-primary)}.stepLine{background:var(--ash-border);border-radius:999px;flex:1;height:2px;margin-bottom:24px}.stepLineDone{background:var(--ash-primary)}.formGrid{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr))}.formCard{max-width:980px}.formStep{max-width:720px}.field{margin-bottom:16px}.fieldSm{max-width:340px}.fieldLabel{color:var(--ash-text-sec);display:block;font-size:11px;font-weight:600;letter-spacing:.2px;margin-bottom:4px}.req{color:var(--ash-err,#dc2626);margin-left:3px}.hint{color:var(--ash-text-mut);font-size:11px;font-style:italic;margin-top:4px}.disabledField{background:#f1f5f9;color:var(--ash-text-sec)}.assetRow{background:#f8fafc;border:1px solid var(--ash-border-light);border-radius:10px;margin-bottom:16px;padding:14px 16px}.assetRowHead{align-items:center;display:flex;justify-content:space-between;margin-bottom:12px}.assetRowTitle{color:var(--ash-primary);font-size:12px;font-weight:700;letter-spacing:.2px}.assetRemove{align-items:center;background:transparent;border:0;border-radius:6px;color:var(--ash-err,#dc2626);cursor:pointer;display:flex;height:26px;justify-content:center;width:26px}.assetRemove:hover{background:#fee2e2}.assetTableWrap{margin-bottom:8px;overflow-x:auto}.assetTable{border-collapse:collapse;font-size:13px;width:100%}.assetTable th{border-bottom:1px solid var(--ash-border);color:var(--ash-text-sec);font-size:11px;font-weight:600;padding:7px 10px 7px 0;text-align:left;white-space:nowrap}.assetTable td{border-bottom:1px solid var(--ash-border-light);color:var(--ash-text);padding:7px 10px 7px 0;vertical-align:top}.assetTable tr:last-child td{border-bottom:0}.filterSelect{background:#fff;border:1px solid var(--ash-border);border-radius:8px;color:var(--ash-text-sec);font-size:13px;min-height:40px;min-width:180px;padding:8px 12px}.sectionTitle{border-bottom:1px solid var(--ash-border-light);color:var(--ash-primary);font-size:14px;font-weight:700;margin-bottom:16px;padding-bottom:8px}.timeline{display:grid;gap:12px}.timelineItem{border-left:2px solid var(--ash-border);padding-left:10px}.timelineAction{color:var(--ash-text);font-size:13px;font-weight:700}.timelineMeta{color:var(--ash-text-mut);font-size:11px}.timelineNote{background:#f8fafc;border-left:2px solid var(--ash-primary);color:var(--ash-text-sec);font-size:12px;margin-top:6px;padding:6px 10px}.topBarLeft,.topBarRight{align-items:center;display:flex;gap:14px}.waffle{cursor:default;display:grid;gap:3px;grid-template-columns:repeat(3,5px);padding:6px}.waffleDot{background:hsla(0,0%,100%,.7);border-radius:50%;height:5px;width:5px}.searchPill{align-items:center;background:hsla(0,0%,100%,.15);border-radius:4px;color:hsla(0,0%,100%,.5);display:flex;font-size:12px;margin-left:20px;max-width:260px;padding:5px 14px;width:260px}.persona{align-items:center;background:hsla(0,0%,100%,.12);border:1px solid hsla(0,0%,100%,.15);border-radius:8px;display:flex;gap:8px;padding:5px 12px}.personaAvatar{align-items:center;border-radius:50%;color:#fff;display:flex;font-size:9px;font-weight:700;height:26px;justify-content:center;width:26px}.personaName{color:#fff;font-size:11px;font-weight:600;line-height:1.2}.personaMeta{color:hsla(0,0%,100%,.55);font-size:9px;line-height:1.2}.navItem{align-items:center;display:flex;gap:10px}.navIcon{align-items:center;display:inline-flex;flex-shrink:0}.navLabel{flex:1}.navBadge{background:var(--ash-err);border-radius:9px;color:#fff;font-size:10px;font-weight:700;height:18px;min-width:18px;padding:0 5px}.bellButton,.navBadge{align-items:center;display:flex;flex-shrink:0;justify-content:center}.bellButton{border:1px solid var(--ash-border);border-radius:8px;cursor:pointer;height:36px;position:relative;transition:background .15s ease;width:36px}.bellButton:hover{background:var(--ash-primary-light)!important}.bellBadge{align-items:center;background:var(--ash-err);border:1.5px solid #fff;border-radius:8px;box-sizing:border-box;color:#fff;display:flex;font-size:9px;font-weight:700;height:16px;justify-content:center;line-height:1;min-width:16px;padding:0 4px;position:absolute;right:-5px;top:-5px}.statCard{display:flex;flex-direction:column;gap:6px}.statHead{align-items:center;display:flex;gap:10px}.statIcon{align-items:center;border-radius:8px;display:flex;height:32px;justify-content:center;width:32px}.typeCard{background:#fff;border:2px solid var(--ash-border);border-radius:8px;cursor:pointer;margin-bottom:12px;padding:14px 18px;text-align:left;width:100%}.typeCardSelected{background:var(--ash-primary-light);border-color:var(--ash-primary)}.typeCardInner{align-items:flex-start;display:flex;gap:12px}.radioDot{align-items:center;border:2px solid var(--ash-text-mut);border-radius:50%;display:flex;flex-shrink:0;height:18px;justify-content:center;margin-top:2px;width:18px}.radioDotSelected{border-color:var(--ash-primary)}.radioDotInner{background:var(--ash-primary);border-radius:50%;height:9px;width:9px}.typeLabel{color:var(--ash-text);font-size:14px;font-weight:700}.typeDesc{color:var(--ash-text-sec);font-size:12px;margin-top:3px}.backLink{align-items:center;background:none;border:0;color:var(--ash-primary);cursor:pointer;display:inline-flex;font-size:13px;font-weight:600;gap:6px;margin-bottom:8px;padding:0}.detailGrid{display:grid;gap:16px;grid-template-columns:1.5fr 1fr}.detailRow{border-bottom:1px solid var(--ash-border-light);display:flex;padding:7px 0}.detailRowKey{color:var(--ash-text-sec);flex-shrink:0;font-size:11px;font-weight:600;width:150px}.detailRowVal{color:var(--ash-text);font-size:13px}.actionCard{border:1px solid var(--ash-border);border-left-width:4px;border-radius:10px;margin-bottom:16px;padding:16px}.actionTitle{color:var(--ash-text);font-size:14px;font-weight:700;margin-bottom:4px}.actionHelp{color:var(--ash-text-sec);font-size:12px;margin-bottom:12px}.pageDesc{color:var(--ash-text-sec);font-size:13px;margin:-10px 0 18px}.subTabs{border-bottom:2px solid var(--ash-border);display:flex;gap:0;margin-bottom:16px;overflow-x:auto}.subTab{background:none;border:0;border-bottom:2px solid transparent;color:var(--ash-text-sec);cursor:pointer;font-family:Segoe UI,-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;font-weight:600;margin-bottom:-2px;min-height:44px;padding:10px 18px;white-space:nowrap}.subTabActive{border-bottom-color:var(--ash-primary);color:var(--ash-primary)}.cardHeadRow{align-items:center;border-bottom:1px solid var(--ash-border);display:flex;justify-content:space-between;padding:14px 16px}.cardHeadTitle{color:var(--ash-text);font-size:14px;font-weight:700}.rowMuted td{color:var(--ash-text-mut)}.statusPill{border-radius:12px;display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;white-space:nowrap}.statusPillActive{background:#f0fdf4;border:1px solid #4ade80;color:#166534}.statusPillInactive{background:#f8fafc;border:1px solid #94a3b8;color:#334155}.rowActions{display:inline-flex;gap:6px}.iconBtn{align-items:center;background:transparent;border:1px solid var(--ash-border);border-radius:6px;color:var(--ash-text-sec);cursor:pointer;display:inline-flex;height:30px;justify-content:center;width:30px}.iconBtn:hover{background:#f8fafc}.iconBtnDanger{color:var(--ash-err)}.iconBtnDanger:hover{background:#fef2f2}.timelineV{padding-left:20px;position:relative}.timelineVItem{position:relative}.timelineVDot{border:2px solid #fff;border-radius:50%;height:11px;left:-20px;position:absolute;top:2px;width:11px}.timelineVLine{bottom:0;left:-15px;position:absolute;top:13px;width:1px}.timelineVAction{color:var(--ash-text);font-size:12.5px;font-weight:600}.timelineVMeta{color:var(--ash-text-mut);font-size:11px}@media (max-width:1023px){.detailGrid{grid-template-columns:1fr}}@media (max-width:767px){.appRoot{height:auto;overflow:visible}.subHeader{height:auto;min-height:52px;padding:8px 12px}.layout{display:block;min-height:auto;overflow:visible}.sidebar{border-right:0;border-top:1px solid var(--ash-border);height:auto;overflow-y:visible;position:static;width:100%}.main{overflow-y:visible;padding:12px}.pageTitle{font-size:20px}.stepper{overflow-x:auto;padding-bottom:6px}.table{min-width:100%}.formGrid,.statsGrid{grid-template-columns:1fr}.statsGrid{gap:10px}.statCard{align-items:center;flex-direction:row;gap:12px;justify-content:space-between}.cardPad{padding:14px}.filterRow{gap:10px}.filterRow>*{flex:1 1 100%;min-width:0}.filterRow>button{flex:1 1 calc(50% - 5px)}.filterSelect{font-size:16px;min-height:44px;min-width:0;width:100%}.appTitle{-webkit-box-orient:vertical;-webkit-line-clamp:2;display:-webkit-box;line-height:1.25;overflow:hidden}.input,.select,.textarea{font-size:16px;min-height:44px}.select{min-width:0}.textarea{min-height:88px}.btn{font-size:14px;min-height:44px;padding:10px 14px}.buttonRow{flex-wrap:wrap}.tableWrap{max-height:none}.actionCard{padding:14px}.detailRowKey{width:110px}.detailRowVal{overflow-wrap:anywhere}.mobileList{padding:0}.mobileItemHead{margin-bottom:8px}.mobileField{align-items:baseline;column-gap:10px;grid-template-columns:92px minmax(0,1fr);margin-bottom:6px}.mobileFieldValue{overflow-wrap:anywhere}.mobileItem:active{background:var(--ash-body-bg)}}
+/* ── Prototype-only additions ── */
+.shell{display:flex;flex-direction:column;height:100vh;background:#fff;}
+/* SharePoint chrome replica (measured on IAMS-Dev at 100% zoom) */
+.spSuite{height:48px;flex-shrink:0;background:#0078d4;color:#fff;display:flex;align-items:center;position:relative;z-index:60;}
+.spBtn{width:48px;height:48px;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;flex-shrink:0;}
+.spBtn:hover{background:rgba(0,0,0,.12);}
+.spBrand{font-size:16px;font-weight:600;line-height:48px;margin-left:8px;white-space:nowrap;}
+.spSearch{position:absolute;left:50%;top:8px;transform:translateX(-50%);width:392px;height:32px;background:#fafafa;border-radius:4px;display:flex;align-items:center;gap:10px;padding:0 12px;color:#605e5c;font-size:14px;}
+.spRight{margin-left:auto;display:flex;position:relative;}
+.spMeAv{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;}
+.spPage{flex:1;min-height:0;display:flex;margin:0;background:#fff;overflow:hidden;}
+.spScroll{flex:1;min-width:0;overflow-y:auto;overflow-x:hidden;}
+/* Prototype-only demo control */
+.demoFab{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:900;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 18px;border-radius:18px;border:1px solid var(--ash-primary-dark);background:var(--ash-primary);color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.18);}
+.demoFab:hover{background:var(--ash-primary-dark);}
+.main>section,.main>div{animation:fadeIn .3s;}
+.spinner{width:28px;height:28px;border:3px solid var(--ash-primary-light);border-top-color:var(--ash-primary);border-radius:50%;animation:spin .8s linear infinite;}
+.msgErr{background:#fde7e9;color:#a4262c;font-size:13px;padding:8px 12px;border-radius:4px;margin-bottom:12px;}
+.msgInfo{background:#f3f9fd;border:1px solid #c7e0f4;color:#323130;font-size:13px;padding:10px 12px;border-radius:6px;margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.pp{border:1px solid var(--ash-border);border-radius:6px;background:#fff;min-height:36px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:3px 6px;position:relative;}
+.pp input{border:0;outline:none;font-size:13px;flex:1;min-width:120px;padding:4px;color:var(--ash-text);}
+.ppChip{display:inline-flex;align-items:center;gap:6px;background:#f3f2f1;border-radius:14px;padding:2px 4px 2px 2px;font-size:13px;color:#323130;}
+.ppAv{width:24px;height:24px;border-radius:50%;background:var(--ash-primary);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ppX{border:0;background:transparent;cursor:pointer;color:#605e5c;width:20px;height:20px;border-radius:50%;font-size:14px;line-height:1;}
+.ppX:hover{background:#e1dfdd;}
+.ppSug{position:absolute;top:100%;left:0;right:0;margin-top:2px;background:#fff;box-shadow:0 6px 14px rgba(0,0,0,.13),0 1px 4px rgba(0,0,0,.11);border-radius:2px;z-index:50;max-height:260px;overflow:auto;}
+.ppSugHead{font-size:12px;color:#605e5c;padding:8px 12px;border-bottom:1px solid #edebe9;}
+.ppSugItem{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;}
+.ppSugItem:hover{background:#f3f2f1;}
+.ppSugName{font-size:14px;color:#323130;}
+.ppSugSub{font-size:12px;color:#605e5c;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:1000;}
+.panel{position:fixed;top:0;right:0;bottom:0;width:340px;max-width:100%;background:#fff;box-shadow:0 25.6px 57.6px rgba(0,0,0,.22),0 4.8px 14.4px rgba(0,0,0,.18);z-index:1001;display:flex;flex-direction:column;animation:panelIn .2s ease-out;}
+.panelHead{display:flex;justify-content:space-between;align-items:center;padding:18px 24px 0;}
+.panelTitle{font-size:20px;font-weight:600;color:#323130;}
+.panelBody{flex:1;overflow:auto;padding:0 24px 20px;}
+.panelFoot{padding:16px 24px;border-top:1px solid #edebe9;}
+.fLabel{font-size:14px;font-weight:600;color:#323130;padding:5px 0;display:block;}
+.fLabel .r{color:#a4262c;padding-left:2px;}
+.fInput{width:100%;height:32px;border:1px solid #8a8886;border-radius:2px;padding:0 8px;font-size:14px;color:#323130;outline:none;}
+.fInput:focus{border:2px solid var(--ash-primary);padding:0 7px;}
+.fBtn{height:32px;min-width:80px;padding:0 16px;border-radius:2px;font-size:14px;font-weight:600;cursor:pointer;border:1px solid #8a8886;background:#fff;color:#323130;}
+.fBtn:hover{background:#f3f2f1;}
+.fBtnP{background:var(--ash-primary);border-color:var(--ash-primary);color:#fff;}
+.fBtnP:hover{background:var(--ash-primary-dark);}
+.fBtn:disabled{opacity:.5;cursor:not-allowed;}
+.tgl{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px;color:#323130;user-select:none;}
+.tglTrack{width:40px;height:20px;border-radius:10px;border:1px solid #605e5c;position:relative;transition:all .15s;}
+.tglThumb{position:absolute;top:3px;left:4px;width:12px;height:12px;border-radius:50%;background:#605e5c;transition:all .15s;}
+.tgl.on .tglTrack{background:var(--ash-primary);border-color:var(--ash-primary);}
+.tgl.on .tglThumb{left:22px;background:#fff;}
+.dlg{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:340px;max-width:calc(100% - 32px);background:#fff;box-shadow:0 25.6px 57.6px rgba(0,0,0,.22);z-index:1001;padding:24px;border-radius:2px;}
+.dlgTitle{font-size:20px;font-weight:600;color:#323130;margin-bottom:16px;}
+.dlgMsg{font-size:14px;color:#605e5c;line-height:1.45;margin-bottom:24px;}
+.demoCard{border:1px dashed #94a3b8;background:#f8fafc;}
+.demoTag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.5px;color:#64748b;background:#e2e8f0;border-radius:3px;padding:1px 6px;margin-left:6px;vertical-align:middle;}
+.pickerMenu{position:absolute;top:100%;right:0;margin-top:4px;width:340px;background:#fff;border-radius:10px;box-shadow:0 12px 40px rgba(0,0,0,.2);z-index:9999;overflow:hidden;border:1px solid var(--ash-border);}
+.pickerItem{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;border-bottom:1px solid var(--ash-border-light);}
+.pickerItem:hover{background:#f8fafc;}
+@media (max-width:767px){body{overflow:auto;}.shell{height:auto;}.spSearch{display:none;}.spPage{margin:0;border-radius:0;}}
+</style></head><body><div id="root"></div>
+<script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.23.9/babel.min.js"></script>
+<script type="text/babel">
+const {useState,useEffect,useMemo,useCallback,useRef}=React;
+
+// ═══════════════════════════════════════════════════════════════════════
+// INNOMICK TECHNOLOGY — IT ASSET TRANSFER MANAGEMENT SYSTEM  (prototype v5)
+// Mirrors the IAMS-Dev SPFx build: same stylesheet, theme, status model,
+// branch-aware routing, delivery + requestor confirmation, reminders,
+// multi-asset requests, Setup masters, CSV export.
+// Stack in production: SPFx + SharePoint Lists + Power Automate + Graph.
+// ═══════════════════════════════════════════════════════════════════════
+
+const LOGO="data:image/png;base64,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";
+const T={primary:"#006b5e",primaryDark:"#005549",primaryLight:"#e6f5f2",headerBg:"#005c4b",green:"#059669",bodyBg:"#f4f6f8",cardBg:"#ffffff",border:"#e2e8f0",borderLight:"#f1f5f9",text:"#1e293b",textSec:"#64748b",textMut:"#94a3b8",ok:"#16a34a",warn:"#f59e0b",err:"#dc2626",info:"#2563eb",amber:"#f59e0b",purple:"#7c3aed",teal:"#0d9488",font:"'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif"};
+const STATUS={
+  pending_manager:{label:"Pending Manager",color:"#92400e",border:"#f59e0b",bg:"#fffbeb"},
+  pending_details:{label:"Pending Details",color:"#1d4ed8",border:"#60a5fa",bg:"#eff6ff"},
+  pending_supervisor:{label:"Pending Supervisor",color:"#6d28d9",border:"#a78bfa",bg:"#f5f3ff"},
+  pending_delivery:{label:"Pending Delivery",color:"#9a3412",border:"#fb923c",bg:"#fff7ed"},
+  pending_confirmation:{label:"Pending Confirmation",color:"#0e7490",border:"#22d3ee",bg:"#ecfeff"},
+  completed:{label:"Completed",color:"#166534",border:"#4ade80",bg:"#f0fdf4"},
+  rejected:{label:"Rejected",color:"#991b1b",border:"#f87171",bg:"#fef2f2"},
+  cancelled:{label:"Cancelled",color:"#334155",border:"#94a3b8",bg:"#f8fafc"},
+};
+const IN_PROGRESS=["pending_manager","pending_details","pending_supervisor","pending_delivery","pending_confirmation"];
+const WAITING_ON={pending_manager:"IT Manager",pending_details:"IT Technician",pending_supervisor:"IT Supervisor",pending_delivery:"IT Technician",pending_confirmation:"Requestor"};
+const ROLE_TITLE={technician:"IT Technician",manager:"IT Manager",supervisor:"IT Supervisor",admin:"Administrator",system:"System"};
+const REQUEST_TYPES=[
+  {key:"new",label:"New Asset Request",description:"Request a completely new asset for your department. Requires IT Manager approval."},
+  {key:"replace",label:"Replacement/Exchange",description:"Replace or exchange an existing asset. Goes directly to IT Supervisor."},
+];
+const typeLabel=k=>(REQUEST_TYPES.find(t=>t.key===k)||{}).label||k;
+const SLA_DAYS=2;
+
+// ── Branch routing: Innomick Tech Park (INTP) has no IT Supervisor ──
+const hasSupervisor=b=>{const t=String(b||"").trim().toLowerCase();return !t||!(t==="intp"||t.indexOf("tech park")>=0);};
+const ACTION_LABEL={manager_approve:"Approve",manager_reject:"Reject",supervisor_approve:"Approve",supervisor_reject:"Reject",submit_details:"Submit Asset Details",mark_delivered:"Mark as Delivered",requestor_confirm:"Confirm Receipt",resubmit:"Resubmit Request",cancel:"Cancel Request",change_request:"Edit Request"};
+const WF_NEW={
+  pending_manager:{manager_approve:"pending_details",manager_reject:"rejected",change_request:"pending_manager",cancel:"cancelled"},
+  pending_details:{submit_details:"pending_supervisor",change_request:"pending_manager",cancel:"cancelled"},
+  pending_supervisor:{supervisor_approve:"pending_delivery",supervisor_reject:"rejected",change_request:"pending_manager",cancel:"cancelled"},
+  pending_delivery:{mark_delivered:"pending_confirmation"},
+  pending_confirmation:{requestor_confirm:"completed"},
+  rejected:{resubmit:"pending_manager",cancel:"cancelled"},completed:{},cancelled:{}};
+const WF_REPLACE={
+  pending_supervisor:{supervisor_approve:"pending_delivery",supervisor_reject:"rejected",change_request:"pending_supervisor",cancel:"cancelled"},
+  pending_delivery:{mark_delivered:"pending_confirmation"},
+  pending_confirmation:{requestor_confirm:"completed"},
+  rejected:{resubmit:"pending_supervisor",cancel:"cancelled"},pending_manager:{},pending_details:{},completed:{},cancelled:{}};
+const WF_TECHPARK={
+  pending_manager:{manager_approve:"pending_delivery",manager_reject:"rejected",change_request:"pending_manager",cancel:"cancelled"},
+  pending_delivery:{mark_delivered:"pending_confirmation"},
+  pending_confirmation:{requestor_confirm:"completed"},
+  rejected:{resubmit:"pending_manager",cancel:"cancelled"},pending_details:{},pending_supervisor:{},completed:{},cancelled:{}};
+const wfTable=(type,sup)=>sup?(type==="new"?WF_NEW:WF_REPLACE):WF_TECHPARK;
+const nextStatus=(status,action,type,sup)=>{const n=(wfTable(type,sup)[status]||{})[action];if(!n)throw new Error(`Invalid transition: ${type}:${status} -> ${action}`);return n;};
+const canDo=(status,action,type,sup)=>Boolean((wfTable(type,sup)[status]||{})[action]);
+const initialStatus=(type,sup)=>sup?(type==="new"?"pending_manager":"pending_supervisor"):"pending_manager";
+function availableActions(role,status,type,isOwner,sup){
+  const valid=Object.keys(ACTION_LABEL).filter(a=>canDo(status,a,type,sup));
+  if(role==="admin")return valid;
+  const s=new Set();
+  if(role==="manager"&&status==="pending_manager"){s.add("manager_approve");s.add("manager_reject");}
+  if(role==="supervisor"&&status==="pending_supervisor"){s.add("supervisor_approve");s.add("supervisor_reject");}
+  if(isOwner){(status==="pending_details"?["submit_details","change_request","cancel"]:status==="pending_delivery"?["mark_delivered"]:status==="rejected"?["resubmit","cancel"]:[]).filter(a=>valid.includes(a)).forEach(a=>s.add(a));}
+  return [...s];
+}
+const HISTORY_LABEL={created:"Created request",submitted_manager:"Submitted for IT Manager approval",submitted_supervisor_review:"Submitted for IT Supervisor review",submitted_supervisor_approval:"Submitted for IT Supervisor approval",manager_approve:"Approved by IT Manager",manager_reject:"Rejected — returned to IT Technician",supervisor_approve:"Approved by IT Supervisor — ready for delivery",supervisor_reject:"Rejected — returned to IT Technician",mark_delivered:"Delivered to requestor — awaiting confirmation",requestor_confirm:"Requestor confirmed receipt — completed",submit_details:"Asset details filled",resubmit:"Resubmitted after rejection",cancel:"Cancelled by IT Technician",change_request:"Request edited (Change Request)",manual_reminder:"Reminder sent"};
+
+// ── Dates (Asia/Kolkata) ──
+const TZ="Asia/Kolkata";
+const fmtDT=iso=>{if(!iso)return "-";const d=new Date(iso);if(isNaN(d))return "-";return d.toLocaleString("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).replace(",","");};
+const fmtD=iso=>{if(!iso)return "-";const d=new Date(iso);if(isNaN(d))return "-";return d.toLocaleDateString("en-CA",{timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit"});};
+const todayD=()=>fmtD(new Date().toISOString());
+const isToday=iso=>Boolean(iso)&&fmtD(iso)===todayD();
+const nowISO=()=>new Date().toISOString();
+const addDays=(iso,n)=>{const d=new Date(iso);d.setDate(d.getDate()+n);return d.toISOString();};
+const at=(daysAgo,hm)=>{const [h,m]=hm.split(":").map(Number);const d=new Date();d.setUTCDate(d.getUTCDate()-daysAgo);d.setUTCHours(h-5,m-30,0,0);return d.toISOString();};
+const isOverdue=r=>{if(!IN_PROGRESS.includes(r.status))return false;const d=r.dueDate?fmtD(r.dueDate):"";return Boolean(d&&d<todayD());};
+
+// ── Users (SharePoint groups ITAsset-<Role>-<Branch> drive this in production) ──
+const USERS=[
+  // dept = Entra ID department; sidebar footer shows it, falling back to email when blank (as on dev)
+  {id:"u1",name:"Rahul Verma",email:"rahul.verma@innomick.com",dept:"IT Infrastructure",role:"technician",branches:["INHQ","INTP"]},
+  {id:"u6",name:"Fatima Sheikh",email:"fatima.sheikh@innomick.com",dept:"IT Infrastructure",role:"technician",branches:["INHQ"]},
+  {id:"u2",name:"Arjun Nair",email:"arjun.nair@innomick.com",dept:"IT Support",role:"technician",branches:["INTP"]},
+  // Like Wasif on dev: one IT Manager covering both branches (in ITAsset-Managers-SASH and -SAHH) → sees Branch filter, no Create.
+  {id:"u3",name:"Priya Sharma",email:"priya.sharma@innomick.com",dept:"Information Technology",role:"manager",branches:["INHQ","INTP"]},
+  {id:"u7",name:"Sanjay Kulkarni",email:"sanjay.kulkarni@innomick.com",dept:"Information Technology",role:"manager",branches:["INTP"]},
+  {id:"u4",name:"Vikram Rao",email:"vikram.rao@innomick.com",dept:"IT Operations",role:"supervisor",branches:["INHQ"]},
+  {id:"u5",name:"Neha Kapoor",email:"neha.kapoor@innomick.com",dept:"",role:"admin",branches:["INHQ","INTP"]},
+];
+const userById=id=>USERS.find(u=>u.id===id);
+// ── Entra ID directory (People Picker source). companyName → branch; department → destination ──
+const HQ="Innomick Technology - HQ",TP="Innomick Technology - Tech Park";
+const AD=[
+  {id:101,name:"Ananya Iyer",email:"ananya.iyer@innomick.com",company:HQ,dept:"INHQ Engineering"},
+  {id:102,name:"Karan Malhotra",email:"karan.malhotra@innomick.com",company:HQ,dept:"INHQ Finance"},
+  {id:103,name:"Meera Joshi",email:"meera.joshi@innomick.com",company:HQ,dept:"INHQ Human Resources"},
+  {id:104,name:"Rohit Desai",email:"rohit.desai@innomick.com",company:HQ,dept:"INHQ Sales & Marketing"},
+  {id:105,name:"Sneha Reddy",email:"sneha.reddy@innomick.com",company:HQ,dept:"INHQ Quality Assurance"},
+  {id:106,name:"Aditya Menon",email:"aditya.menon@innomick.com",company:HQ,dept:"INHQ Engineering"},
+  {id:107,name:"Divya Pillai",email:"divya.pillai@innomick.com",company:HQ,dept:"INHQ Product Management"},
+  {id:108,name:"Suresh Babu",email:"suresh.babu@innomick.com",company:HQ,dept:"INHQ Administration"},
+  {id:109,name:"Farhan Qureshi",email:"farhan.qureshi@innomick.com",company:TP,dept:"INTP Software Development"},
+  {id:110,name:"Lakshmi Narayan",email:"lakshmi.narayan@innomick.com",company:TP,dept:"INTP Cloud Operations"},
+  {id:111,name:"Imtiaz Khan",email:"imtiaz.khan@innomick.com",company:TP,dept:"INTP Customer Support"},
+  {id:112,name:"Pooja Agarwal",email:"pooja.agarwal@innomick.com",company:TP,dept:"INTP Data Analytics"},
+  {id:113,name:"Naveen Kumar",email:"naveen.kumar@innomick.com",company:TP,dept:"INTP Facilities"},
+  {id:114,name:"Ritu Saxena",email:"ritu.saxena@innomick.com",company:TP,dept:"INTP Software Development"},
+  // Shared/service account with no department on its directory profile (like "Intranet" on dev) — cannot be a requestor
+  {id:115,name:"IT Service Desk",email:"servicedesk@innomick.com",company:HQ,dept:""},
+];
+const companyBranches=c=>{const t=(c||"").toLowerCase(),n=[];if(t.indexOf("- hq")>=0||t.endsWith("hq"))n.push("INHQ");if(t.indexOf("tech park")>=0)n.push("INTP");return n;};
+const initials=n=>(n||"").split(" ").map(x=>x[0]).join("").slice(0,2).toUpperCase();
+
+// ── Master lists (Setup) ──
+const stamp=(by,d)=>({createdBy:by,createdAt:at(d,"09:00"),modifiedBy:by,modifiedAt:at(d,"09:00")});
+const SEED_MASTERS={
+  equipment:[["Laptop",1],["Desktop Computer",2],["LCD Monitor",3],["Docking Station",4],["IP Phone",5],["Headset",6],["Printer",7],["Scanner",8],["Other",99]].map(([t,s],i)=>({id:i+1,title:t,sortOrder:s,isActive:true,...stamp("Neha Kapoor",160)})),
+  departments:["INHQ Engineering","INHQ Finance","INHQ Human Resources","INHQ Sales & Marketing","INHQ Quality Assurance","INHQ Product Management","INHQ Administration","INTP Software Development","INTP Cloud Operations","INTP Customer Support","INTP Data Analytics","INTP Facilities"].map((t,i)=>({id:i+1,title:t,branch:t.slice(0,4),isActive:true,...stamp("Neha Kapoor",160)})),
+  // MasterBranches titles are short (dev: "Al-Assima"); filters/detail show "Title (CODE)" (dev: "Al-Assima (SASH)").
+  branches:[{id:1,title:"Innomick HQ",code:"INHQ",sortOrder:1,isActive:true,...stamp("Neha Kapoor",160)},{id:2,title:"Innomick Tech Park",code:"INTP",sortOrder:2,isActive:true,...stamp("Neha Kapoor",160)}],
+};
+const MASTER_CFG={
+  equipment:{tab:"Equipment Types",singular:"Equipment Type",desc:"Manage the equipment types available across the system.",hasSortOrder:true,hasIsActive:true},
+  departments:{tab:"Departments",singular:"Department",desc:"Destination departments. New departments are also captured automatically from the requestor's directory profile.",hasBranch:true,hasIsActive:true},
+  branches:{tab:"Branches",singular:"Branch",desc:"Innomick branches. Tech Park (INTP) has no IT Supervisor — its requests route to the IT Manager.",hasCode:true,hasSortOrder:true,hasIsActive:true},
+};
+
+// ── Seed requests ──
+const ev=(action,actor,iso,note)=>({action,actorId:actor.id||null,actorName:actor.name,actorRole:actor.role||null,actionDate:iso,note:note||""});
+const U_=id=>userById(id);
+const ad=id=>AD.find(p=>p.id===id);
+let EVT=1;
+function mkReq(o){
+  const p=ad(o.requestorId),tech=U_(o.tech);
+  const r={id:o.n,requestId:`REQ-2026-${o.n}`,ticketNumber:o.ticket,requestType:o.type,branch:o.branch,departmentLabel:p.dept,newLocation:p.dept,requestorId:p.id,requestorNameLabel:p.name,requestorEmail:p.email,technicianId:tech.id,technicianNameLabel:tech.name,createdByTechnicianId:tech.id,status:o.status,reason:o.reason,requestDate:o.date,modified:o.timeline[o.timeline.length-1].actionDate,stageEnteredAt:o.timeline[o.timeline.length-1].actionDate,assignmentDate:o.assignmentDate||"",deliveredAt:o.deliveredAt||"",confirmedAt:o.confirmedAt||"",reminderRequestedAt:o.reminderRequestedAt||"",assets:o.assets.map((a,i)=>({id:i+1,equipmentOther:"",model:"",serialNumber:"",rfidAssetId:"",...a})),timeline:o.timeline.map(e=>({...e,id:EVT++}))};
+  r.dueDate=addDays(r.stageEnteredAt,SLA_DAYS);
+  return r;
+}
+const RH=U_("u1"),FS=U_("u6"),AN=U_("u2"),PS=U_("u3"),SK=U_("u7"),VR=U_("u4");
+const TP_NOTE="Tech Park (no IT Supervisor) — routed to IT Manager; asset details captured up front";
+const REP_NOTE="Replacement — asset details captured up front, skips Manager";
+// asset shorthand: A(typeId, model, serial, rfid)
+const A=(t,m,s,r)=>({equipmentTypeId:t,model:m||"",serialNumber:s||"",rfidAssetId:r||""});
+const sum=as=>as.map(a=>`${a.model} · ${a.serialNumber} · ${a.rfidAssetId}`).join("  |  ");
+// submit events: route "mgr" (HQ new), "rep" (HQ replacement → Supervisor), "tp" (Tech Park → Manager)
+const sub=(t,iso,ticket,route)=>[ev("created",t,iso,ticket),ev(route==="rep"?"submitted_supervisor_review":"submitted_manager",t,iso,route==="tp"?TP_NOTE:route==="rep"?REP_NOTE:"")];
+const R=(n,ticket,type,branch,tech,requestorId,status,d,hm,reason,assets,extraTimeline,more={})=>{const t=U_(tech),iso=at(d,hm);const route=branch==="INTP"?"tp":type==="replace"?"rep":"mgr";return mkReq({n,ticket,type,branch,tech,requestorId,status,date:iso,reason,assets,assignmentDate:route!=="mgr"?iso:more.assignmentDate,...more,timeline:[...sub(t,iso,ticket,route),...extraTimeline]});};
+
+const L1=A(1,"Dell Latitude 5440","5CG4421HQX","RFID-IN-24081"),L2=A(1,"Lenovo ThinkPad T14 Gen 4","PF4KZ2M9","RFID-IN-24082"),L3=A(1,"HP EliteBook 840 G10","5CG3378TLP","RFID-IN-24083");
+const D1=A(2,"Dell OptiPlex 7010 SFF","8QW2H24","RFID-IN-24090"),MN1=A(3,"Dell P2423D 24\"","CN-0V2T6-74261","RFID-IN-24101"),MN2=A(3,"LG 27UL550-W 27\"","312NTAB8K441","RFID-IN-24102");
+const DK1=A(4,"Dell WD19S Dock","CN-0F6R7J-23011","RFID-IN-24110"),PH1=A(5,"Poly CCX 400","8L4512A9B3","RFID-IN-24120"),HS1=A(6,"Jabra Evolve2 65","T4X02993412","RFID-IN-24130");
+const PR1=A(7,"HP LaserJet Pro M404dn","PHBRC12457","RFID-IN-24140"),SC1=A(8,"Fujitsu fi-8170","A23GD11054","RFID-IN-24150");
+const blank=t=>({equipmentTypeId:t});
+
+const SEED=[
+  // ── Innomick HQ (INHQ) — full path: Manager → Technician details → Supervisor → Delivery → Requestor ──
+  R(150,"SDP-10452-26","new","INHQ","u1",101,"pending_manager",0,"09:40","Onboarding kit for a new senior backend engineer joining on Monday.",[blank(1),blank(4)],[]),
+  R(149,"SDP-10418-26","new","INHQ","u6",102,"pending_manager",4,"10:15","Additional workstation for the month-end close team.",[blank(2)],[]),
+  R(148,"SDP-10395-26","new","INHQ","u1",103,"pending_details",2,"11:05","HR business partner workstation setup — laptop, external monitor and headset.",[blank(1),blank(3),blank(6)],[ev("manager_approve",PS,at(1,"15:20"),"Return to technician for asset details")]),
+  R(147,"SDP-10377-26","new","INHQ","u6",104,"pending_details",6,"09:10","Laptop for new regional sales manager (field travel).",[blank(1)],[ev("manager_approve",PS,at(5,"12:30"),"Approved — priority hire")]),
+  R(146,"SDP-10360-26","new","INHQ","u1",105,"pending_supervisor",3,"14:20","Second monitor for the automation test bench.",[MN2],[ev("manager_approve",PS,at(3,"16:45"),""),ev("submit_details",RH,at(1,"10:00"),sum([MN2])),ev("submitted_supervisor_approval",RH,at(1,"10:00"))],{assignmentDate:at(1,"10:00")}),
+  R(145,"SDP-10461-26","replace","INHQ","u1",106,"pending_supervisor",0,"08:55","Laptop battery swelling — exchange from IT store stock.",[L2],[]),
+  R(144,"SDP-10302-26","replace","INHQ","u6",107,"pending_supervisor",6,"13:30","Docking station failing to drive dual displays — replacing unit.",[DK1],[]),
+  R(143,"SDP-10288-26","new","INHQ","u1",101,"pending_delivery",7,"10:00","Desk phone and docking station for the new engineering pod.",[DK1,PH1],[ev("manager_approve",PS,at(7,"14:00"),""),ev("submit_details",RH,at(6,"09:30"),sum([DK1,PH1])),ev("submitted_supervisor_approval",RH,at(6,"09:30")),ev("supervisor_approve",VR,at(1,"11:20"),"Stock confirmed in store")],{assignmentDate:at(6,"09:30")}),
+  R(142,"SDP-10251-26","replace","INHQ","u1",102,"pending_confirmation",5,"09:15","Desktop exchanged — failing SSD on finance reporting PC.",[D1],[ev("supervisor_approve",VR,at(4,"12:00"),""),ev("mark_delivered",RH,at(1,"16:05"))],{deliveredAt:at(1,"16:05")}),
+  R(141,"SDP-10233-26","replace","INHQ","u1",104,"rejected",4,"12:10","Headset microphone not working — exchange.",[HS1],[ev("supervisor_reject",VR,at(3,"17:40"),"RFID tag does not match the store register — please re-check and resubmit.")]),
+  R(140,"SDP-10219-26","new","INHQ","u6",103,"rejected",5,"10:45","Colour printer for the HR floor.",[blank(7)],[ev("manager_reject",PS,at(4,"09:30"),"Use the shared floor printer — no budget for a dedicated device this quarter.")]),
+  R(139,"SDP-10180-26","new","INHQ","u1",105,"completed",12,"09:00","QA lead laptop refresh.",[L3],[ev("manager_approve",PS,at(12,"13:00"),""),ev("submit_details",RH,at(11,"10:00"),sum([L3])),ev("submitted_supervisor_approval",RH,at(11,"10:00")),ev("supervisor_approve",VR,at(11,"14:30"),""),ev("mark_delivered",RH,at(10,"11:00")),ev("requestor_confirm",{name:"Sneha Reddy"},at(10,"15:12"),"Receipt confirmed from email")],{assignmentDate:at(11,"10:00"),deliveredAt:at(10,"11:00"),confirmedAt:at(10,"15:12")}),
+  R(138,"SDP-10166-26","replace","INHQ","u6",106,"completed",14,"10:30","Monitor with dead pixels — exchanged.",[MN1],[ev("supervisor_approve",VR,at(14,"15:00"),""),ev("mark_delivered",FS,at(13,"10:20")),ev("requestor_confirm",{name:"Aditya Menon"},at(13,"12:45"),"Receipt confirmed from email")],{deliveredAt:at(13,"10:20"),confirmedAt:at(13,"12:45")}),
+  R(137,"SDP-10142-26","new","INHQ","u1",107,"cancelled",16,"11:00","Scanner for product documentation archive.",[blank(8)],[ev("cancel",RH,at(15,"09:10"),"Requester withdrew — documents moved to cloud scanning service.")]),
+  // ── Innomick Tech Park (INTP) — no Supervisor: Manager → Delivery → Requestor ──
+  R(136,"SDP-10470-26","new","INTP","u2",109,"pending_manager",0,"10:25","New developer seat — laptop with dual monitors.",[L1,MN1,MN2],[]),
+  R(135,"SDP-10399-26","replace","INTP","u2",110,"pending_manager",4,"15:00","On-call engineer laptop keyboard failure — exchange.",[L3],[]),
+  R(134,"SDP-10341-26","new","INTP","u2",111,"pending_delivery",3,"09:50","Support desk headset and IP phone for new agent.",[HS1,PH1],[ev("manager_approve",SK,at(2,"11:10"),"Approved — ready for delivery")]),
+  R(133,"SDP-10298-26","new","INTP","u2",112,"pending_confirmation",6,"12:19","Analytics workstation with high-resolution monitor.",[D1,MN2],[ev("manager_approve",SK,at(6,"12:27"),"Approved — ready for delivery"),ev("mark_delivered",AN,at(5,"12:28")),ev("manual_reminder",AN,at(3,"10:31"),"Manual reminder sent to the Requestor.")],{deliveredAt:at(5,"12:28"),reminderRequestedAt:at(3,"10:31")}),
+  R(132,"SDP-10275-26","replace","INTP","u2",113,"rejected",3,"14:00","Facilities printer paper-jam fault — exchange.",[PR1],[ev("manager_reject",SK,at(2,"10:05"),"Vendor AMC covers this — raise a service call instead of exchange.")]),
+  R(131,"SDP-10201-26","new","INTP","u2",114,"completed",10,"10:30","Laptop for new software engineer.",[L2],[ev("manager_approve",SK,at(10,"14:00"),"Approved — ready for delivery"),ev("mark_delivered",AN,at(9,"09:15")),ev("requestor_confirm",{name:"Ritu Saxena"},at(9,"11:40"),"Receipt confirmed from email")],{deliveredAt:at(9,"09:15"),confirmedAt:at(9,"11:40")}),
+  R(130,"SDP-10155-26","replace","INTP","u2",110,"completed",15,"09:00","Scanner roller worn out — exchanged.",[SC1],[ev("manager_approve",SK,at(15,"12:00"),"Approved — ready for delivery"),ev("mark_delivered",AN,at(14,"10:00")),ev("requestor_confirm",{name:"Lakshmi Narayan"},at(14,"16:30"),"Receipt confirmed from email")],{deliveredAt:at(14,"10:00"),confirmedAt:at(14,"16:30")}),
+];
+
+// ─────────────────────────── ICONS (same SVG set as the dev build) ───────────────────────────
+const Svg=({size=18,color="currentColor",children})=><svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">{children}</svg>;
+const I={
+  dash:p=><Svg {...p}><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></Svg>,
+  plus:p=><Svg {...p}><path d="M12 5v14M5 12h14"/></Svg>,
+  list:p=><Svg {...p}><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></Svg>,
+  clock:p=><Svg {...p}><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></Svg>,
+  check:p=><Svg {...p}><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></Svg>,
+  x:p=><Svg {...p}><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9l6 6"/></Svg>,
+  doc:p=><Svg {...p}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></Svg>,
+  clip:p=><Svg {...p}><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/><path d="M9 13l2 2 4-4"/></Svg>,
+  pin:p=><Svg {...p}><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></Svg>,
+  bell:p=><Svg {...p}><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></Svg>,
+  gear:p=><Svg {...p}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></Svg>,
+  edit:p=><Svg {...p}><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></Svg>,
+  trash:p=><Svg {...p}><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6M14 11v6"/></Svg>,
+  arrowL:p=><Svg {...p}><path d="M19 12H5M12 19l-7-7 7-7"/></Svg>,
+  arrowR:p=><Svg {...p}><path d="M5 12h14M12 5l7 7-7 7"/></Svg>,
+  search:p=><Svg {...p}><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></Svg>,
+  refresh:p=><Svg {...p}><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></Svg>,
+  download:p=><Svg {...p}><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></Svg>,
+  menu:p=><Svg {...p}><path d="M3 6h18M3 12h18M3 18h18"/></Svg>,
+  close:p=><Svg {...p}><path d="M18 6L6 18M6 6l12 12"/></Svg>,
+};
+
+// ─────────────────────────── PRIMITIVES ───────────────────────────
+const Btn=({kind="primary",disabled,onClick,children,title,style})=>{
+  const k={primary:"btnPrimary",green:"btnGreen",ghost:"btnGhost",dangerGhost:"btnDanger"}[kind];
+  return <button type="button" title={title} disabled={disabled} onClick={disabled?undefined:onClick} className={`btn ${k}`} style={style}>{children}</button>;
+};
+const StatusPill=({status})=>{const m=STATUS[status]||STATUS.pending_manager;return <span style={{backgroundColor:m.bg,border:`1px solid ${m.border}`,borderRadius:12,color:m.color,display:"inline-block",fontSize:11,fontWeight:600,padding:"3px 10px",whiteSpace:"nowrap"}}>{m.label}</span>;};
+const Loading=({label})=><div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:10,padding:36,color:T.textSec,fontSize:13}}><div className="spinner"/>{label}</div>;
+const ErrorBar=({message})=><div className="msgErr" role="alert">{message}</div>;
+const Field=({label,req,hint,sm,style,children})=><div className={`field ${sm?"fieldSm":""}`} style={style}><label className="fieldLabel">{label}{req&&<span className="req">*</span>}</label>{children}{hint&&<div className="hint">{hint}</div>}</div>;
+function useIsMobile(){const [w,setW]=useState(window.innerWidth);useEffect(()=>{const h=()=>setW(window.innerWidth);window.addEventListener("resize",h);return()=>window.removeEventListener("resize",h);},[]);return w<768;}
+
+// ── helpers bound to masters ──
+const eqLabel=(a,masters)=>a.equipmentOther||(masters.equipment.find(e=>e.id===a.equipmentTypeId)||{}).title||"-";
+const summary=(r,masters)=>r.assets.map(a=>eqLabel(a,masters)).join(", ");
+const branchLabel=(code,masters)=>{const b=masters.branches.find(x=>x.code===code);return b?`${b.title} (${b.code})`:String(code||"-");};
+
+// ─────────────────────────── DEMO HELPERS (prototype only: auto-fill + auto-approve) ───────────────────────────
+const rnd=n=>Math.floor(Math.random()*n);
+const pickOne=a=>a[rnd(a.length)];
+const SAMPLE_MODELS={"Laptop":["Dell Latitude 5440","Lenovo ThinkPad T14 Gen 4","HP EliteBook 840 G10"],"Desktop Computer":["Dell OptiPlex 7010 SFF","HP EliteDesk 800 G9","Lenovo ThinkCentre M70q"],"LCD Monitor":["Dell P2423D 24\"","LG 27UL550-W 27\"","HP E24 G5 24\""],"Docking Station":["Dell WD19S Dock","Lenovo ThinkPad USB-C Dock Gen 2"],"IP Phone":["Poly CCX 400","Cisco IP Phone 8841"],"Headset":["Jabra Evolve2 65","Poly Voyager 4320"],"Printer":["HP LaserJet Pro M404dn","Brother HL-L5100DN"],"Scanner":["Fujitsu fi-8170","Canon DR-C230"]};
+const demoModel=t=>pickOne(SAMPLE_MODELS[t]||["Logitech R500s Presenter","Generic Model X1"]);
+const demoSerial=()=>`SN-${100000+rnd(900000)}-26`;
+const demoRfid=()=>`RFID-IN-${24200+rnd(9000)}`;
+const demoTicket=()=>`SDP-${10500+rnd(9000)}-26`;
+const DEMO_REASONS=["New joiner onboarding — standard workstation kit required from Monday.","Existing device is failing intermittently; replacing from IT store stock to avoid downtime.","Team expansion — additional seat approved in this quarter's headcount plan.","Hot-desk upgrade for the project war-room ahead of the client go-live.","Device reached end of warranty; refresh as per the asset lifecycle policy."];
+const DEMO_COMMENTS=["Verified against the IT store register — approved.","Budget available for this quarter — approved.","Stock confirmed, please proceed with delivery.","Checked with the department head — OK to proceed."];
+const DEMO_OTHER=["Wireless Presenter","Webcam (Logitech C920)","USB-C Travel Adapter","Portable SSD 1TB"];
+const DEMO_TYPES=["Webcam","USB Hub","Portable Projector","Barcode Scanner","Label Printer","Conference Speaker"];
+const demoRequestor=branch=>pickOne(AD.filter(p=>companyBranches(p.company).includes(branch)&&(p.dept||"").trim()));
+// Value for a plain text box, derived from its placeholder / label (used by click-to-fill)
+function demoValueFor(el){
+  const ph=(el.getAttribute("placeholder")||"").toLowerCase();
+  const field=el.closest(".field,div");const label=((field&&field.querySelector("label"))||{}).textContent||"";
+  const L=(label+" "+ph).toLowerCase();
+  const row=el.closest(".assetRow");
+  const eqText=row?((row.querySelector("select")&&row.querySelector("select").selectedOptions[0]&&row.querySelector("select").selectedOptions[0].text)||((row.querySelector(".assetRowTitle")||{}).textContent||"").replace(/^Asset \d+ · /,"")):"";
+  if(/sdp-|ticket/.test(L))return demoTicket();
+  if(/projector|specify equipment/.test(L))return pickOne(DEMO_OTHER);
+  if(/model/.test(L))return demoModel(eqText.trim());
+  if(/serial|sn-/.test(L))return demoSerial();
+  if(/rfid|asset id/.test(L))return demoRfid();
+  if(/justification|reason/.test(L))return pickOne(DEMO_REASONS);
+  if(/comment|note/.test(L))return pickOne(DEMO_COMMENTS);
+  if(/e\.g\. inhq|code/.test(L))return "IN"+String.fromCharCode(65+rnd(26))+String.fromCharCode(65+rnd(26));
+  if(/title/.test(L))return pickOne(DEMO_TYPES);
+  return "";
+}
+function setNativeValue(el,v){const proto=el.tagName==="TEXTAREA"?HTMLTextAreaElement.prototype:HTMLInputElement.prototype;Object.getOwnPropertyDescriptor(proto,"value").set.call(el,v);el.dispatchEvent(new Event("input",{bubbles:true}));}
+// Components register a handler for the bottom "Auto Fill" button; handler returns true if it filled something.
+function useDemoAutofill(handler){const ref=useRef(handler);ref.current=handler;useEffect(()=>{const h=e=>{if(ref.current&&ref.current()!==false)e.detail.handled=true;};window.addEventListener("demo-autofill",h);return()=>window.removeEventListener("demo-autofill",h);},[]);}
+
+// ─────────────────────────── REQUEST TABLE ───────────────────────────
+function RequestTable({rows,onOpen,sort,onSort,showTechnician,masters,emptyLabel}){
+  const mobile=useIsMobile();
+  const [expand,setExpand]=useState(false);
+  const short=r=>{const t=summary(r,masters),n=t.split(",").map(s=>s.trim()).filter(Boolean);return n.length<=2?t||"-":`${n.slice(0,2).join(", ")} …(+${n.length-2})`;};
+  const ind=k=>sort.key!==k?<span className="sortIndicator">⇅</span>:<span className="sortIndicatorActive">{sort.dir==="asc"?"▲":"▼"}</span>;
+  const TH=({k,children})=><th className="th" title="Click to sort" onClick={()=>onSort(k)}>{children} {ind(k)}</th>;
+  if(mobile) return <div className="mobileList">
+    {rows.length===0&&<div className="card cardPad">{emptyLabel||"No requests match current filters."}</div>}
+    {rows.map(r=><button key={r.id} className="mobileItem" onClick={()=>onOpen(r.id)} style={{cursor:"pointer",textAlign:"left",width:"100%"}}>
+      <div className="mobileItemHead"><strong>{r.requestId}</strong><StatusPill status={r.status}/></div>
+      {[["Ticket",r.ticketNumber],["Type",typeLabel(r.requestType)],["Asset Type",summary(r,masters)],["Department",r.departmentLabel],["Requested By",r.requestorNameLabel],...(showTechnician?[["Technician",r.technicianNameLabel]]:[]),["Date",fmtDT(r.requestDate)]].map(([l,v])=><div className="mobileField" key={l}><span className="mobileFieldLabel">{l}</span><span className="mobileFieldValue">{v||"-"}</span></div>)}
+    </button>)}
+  </div>;
+  return <div className="tableWrap"><table className="table">
+    <thead><tr>
+      <TH k="requestId">Request ID</TH><TH k="ticketNumber">Ticket Number</TH><TH k="requestType">Type</TH>
+      <th className="th"><span style={{cursor:"pointer"}} title="Click to sort" onClick={()=>onSort("equipment")}>Asset Type {ind("equipment")}</span>
+        <button type="button" title={expand?"Collapse — show first two":"Expand — show all assets"} onClick={e=>{e.stopPropagation();setExpand(x=>!x);}} style={{marginLeft:6,padding:"0 6px",border:`1px solid ${T.border}`,borderRadius:4,background:"transparent",color:T.textSec,cursor:"pointer",fontSize:12,lineHeight:"18px",verticalAlign:"middle"}}>{expand?"−":"+"}</button></th>
+      <TH k="departmentLabel">Department</TH><TH k="requestorNameLabel">Requested By</TH>
+      {showTechnician&&<TH k="technicianNameLabel">Technician</TH>}
+      <TH k="status">Status</TH><TH k="requestDate">Date</TH>
+    </tr></thead>
+    <tbody>
+      {rows.length===0&&<tr><td colSpan={showTechnician?9:8} className="td" style={{textAlign:"center"}}>{emptyLabel||"No requests match current filters."}</td></tr>}
+      {rows.map(r=><tr key={r.id} className="tableRow" onClick={()=>onOpen(r.id)} style={{cursor:"pointer"}}>
+        <td className="td">{r.requestId}</td><td className="td">{r.ticketNumber}</td><td className="td">{typeLabel(r.requestType)}</td>
+        <td className="td" title={expand?undefined:summary(r,masters)} style={expand?{whiteSpace:"normal",minWidth:180,maxWidth:320}:undefined}>{expand?summary(r,masters):short(r)}</td>
+        <td className="td">{r.departmentLabel||"-"}</td><td className="td">{r.requestorNameLabel||"-"}</td>
+        {showTechnician&&<td className="td">{r.technicianNameLabel||"-"}</td>}
+        <td className="td"><StatusPill status={r.status}/></td>
+        <td className="td" style={{whiteSpace:"nowrap"}}>{fmtDT(r.requestDate)}</td>
+      </tr>)}
+    </tbody>
+  </table></div>;
+}
+
+// ── CSV export (one row per asset, UTF-8 BOM, formula-injection safe) ──
+function exportCsv(rows,masters,name){
+  const head=["Request ID","Ticket Number","Request Type","Branch","Department","Requested By","Requestor Email","Technician","Status","Request Date","Due Date","Overdue","Total Assets","Asset No","Equipment Type","Model","Serial Number","RFID / Asset ID","Assignment Date","Delivered At","Confirmed At","Last Updated"];
+  const esc=v=>{let t=v==null?"":String(v);if(["=","+","-","@"].indexOf(t.charAt(0))>=0&&!/^-?\d/.test(t))t="'"+t;return /[",\r\n]/.test(t)?`"${t.replace(/"/g,'""')}"`:t;};
+  const lines=[head.map(esc).join(",")];
+  rows.forEach(r=>r.assets.forEach((a,i)=>lines.push([r.requestId,r.ticketNumber,typeLabel(r.requestType),branchLabel(r.branch,masters),r.departmentLabel,r.requestorNameLabel,r.requestorEmail,r.technicianNameLabel,STATUS[r.status].label,fmtDT(r.requestDate),r.dueDate&&IN_PROGRESS.includes(r.status)?fmtD(r.dueDate):"",isOverdue(r)?"Yes":"No",r.assets.length,i+1,eqLabel(a,masters),a.model,a.serialNumber,a.rfidAssetId,r.assignmentDate?fmtD(r.assignmentDate):"",r.deliveredAt?fmtDT(r.deliveredAt):"",r.confirmedAt?fmtDT(r.confirmedAt):"",fmtDT(r.modified)].map(esc).join(","))));
+  const blob=new Blob(["﻿"+lines.join("\r\n")],{type:"text/csv;charset=utf-8;"});
+  const url=URL.createObjectURL(blob),el=document.createElement("a");el.href=url;el.download=`ITAMS-${name}-${todayD()}.csv`;document.body.appendChild(el);el.click();el.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+// ─────────────────────────── FILTER BAR + LIST (shared by Dashboard & My Requests) ───────────────────────────
+function useRequestFilters(records,user,masters){
+  const [f,setF]=useState({query:""});
+  const [sort,setSort]=useState({key:"lastActivity",dir:"desc"});
+  const branches=user.branches&&user.branches.length?user.branches:masters.branches.map(b=>b.code);
+  const multi=branches.length>1;
+  const deptOpts=useMemo(()=>{const b=multi?f.branch:branches[0];const src=b?records.filter(r=>r.branch===b):records;return [...new Set(src.map(r=>(r.departmentLabel||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));},[records,f.branch,multi]);
+  const sortVal=(r,k)=>k==="lastActivity"?r.modified||r.requestDate:k==="equipment"?summary(r,masters):k==="requestDate"?r.requestDate:(r[k]||"");
+  const rows=useMemo(()=>{const q=f.query.trim().toLowerCase();return records.filter(r=>(!q||r.requestId.toLowerCase().includes(q)||r.ticketNumber.toLowerCase().includes(q))&&(!f.branch||r.branch===f.branch)&&(!f.dept||(r.departmentLabel||"").toLowerCase()===f.dept.toLowerCase())&&(!f.eq||r.assets.some(a=>a.equipmentTypeId===f.eq))&&(!f.status||r.status===f.status)).sort((a,b)=>{const d=sort.dir==="asc"?1:-1,x=String(sortVal(a,sort.key)).toLowerCase(),y=String(sortVal(b,sort.key)).toLowerCase();return x<y?-d:x>y?d:0;});},[records,f,sort,masters]);
+  const dirty=Boolean(f.query.trim()||f.branch||f.dept||f.eq||f.status)||sort.key!=="lastActivity"||sort.dir!=="desc";
+  const onSort=k=>setSort(s=>s.key===k?{key:k,dir:s.dir==="asc"?"desc":"asc"}:{key:k,dir:"asc"});
+  const reset=()=>{setF({query:""});setSort({key:"lastActivity",dir:"desc"});};
+  return {f,setF,sort,onSort,rows,dirty,reset,multi,branches,deptOpts};
+}
+function FilterBar({F,masters,onRefresh,onExport,exporting}){
+  const {f,setF,rows,dirty,reset,multi,branches,deptOpts}=F;
+  const up=(k,v)=>setF(p=>({...p,[k]:v}));
+  return <div className="card cardPad" style={{marginBottom:14}}><div className="filterRow">
+    <div className="filterSearch"><span style={{color:T.textMut,display:"flex",marginRight:6}}><I.search size={14}/></span><input value={f.query} placeholder="Search by ticket number" onChange={e=>up("query",e.target.value)}/></div>
+    {multi&&<select className="filterSelect" value={f.branch||""} onChange={e=>setF(p=>({...p,branch:e.target.value||undefined,dept:undefined}))}><option value="">All Branches</option>{branches.map(b=><option key={b} value={b}>{branchLabel(b,masters)}</option>)}</select>}
+    <select className="filterSelect" value={f.dept||""} onChange={e=>up("dept",e.target.value||undefined)}><option value="">All Departments</option>{deptOpts.map(d=><option key={d} value={d}>{d}</option>)}</select>
+    <select className="filterSelect" value={f.eq||""} onChange={e=>up("eq",e.target.value?Number(e.target.value):undefined)}><option value="">All Asset Types</option>{masters.equipment.slice().sort((a,b)=>a.sortOrder-b.sortOrder).map(t=><option key={t.id} value={t.id}>{t.title}</option>)}</select>
+    <select className="filterSelect" value={f.status||""} onChange={e=>up("status",e.target.value||undefined)}><option value="">All Status</option>{Object.entries(STATUS).map(([k,v])=><option key={k} value={k}>{v.label}</option>)}</select>
+    <Btn kind="ghost" onClick={onRefresh}><I.refresh size={14}/> Refresh</Btn>
+    <Btn kind="primary" disabled={rows.length===0||exporting} title={rows.length===0?"No records to export.":`Export ${rows.length} record(s) to CSV`} onClick={onExport}><I.download size={14}/> {exporting?"Exporting...":"Export"}</Btn>
+    <Btn kind="ghost" disabled={!dirty} onClick={reset}>Reset</Btn>
+  </div></div>;
+}
+function useRefresh(){const [loading,setLoading]=useState(false);const refresh=()=>{setLoading(true);setTimeout(()=>setLoading(false),450);};return [loading,refresh];}
+function useExport(rows,masters,name){const [x,setX]=useState(false);return [x,()=>{setX(true);setTimeout(()=>{exportCsv(rows,masters,name);setX(false);},250);}];}
+
+// ─────────────────────────── DASHBOARD ───────────────────────────
+function Dashboard({user,records,masters,onOpen,onCreate}){
+  const F=useRequestFilters(records,user,masters);
+  const [loading,refresh]=useRefresh();
+  const [exporting,doExport]=useExport(F.rows,masters,"Dashboard");
+  // FIX vs dev build: Pending now counts every in-progress stage (delivery + confirmation were missing → showed 0).
+  const counts={pending:records.filter(r=>IN_PROGRESS.includes(r.status)).length,approved:records.filter(r=>r.status==="completed").length,rejected:records.filter(r=>r.status==="rejected").length};
+  const Stat=({accent,icon,label,val})=><div className="card cardPad statCard" style={{borderLeft:`4px solid ${accent}`}}>
+    <div className="statHead"><div className="statIcon" style={{background:`${accent}18`}}>{icon}</div><div className="statTitle">{label}</div></div>
+    <div className="statValue">{val}</div></div>;
+  return <section>
+    <h2 className="pageTitle">Dashboard</h2>
+    <div className="statsGrid">
+      <Stat accent={T.amber} icon={<I.clock size={22} color={T.amber}/>} label="Pending Request" val={counts.pending}/>
+      <Stat accent={T.green} icon={<I.check size={22} color={T.green}/>} label="Approved Request" val={counts.approved}/>
+      <Stat accent={T.err} icon={<I.x size={22} color={T.err}/>} label="Rejected Request" val={counts.rejected}/>
+    </div>
+    <FilterBar F={F} masters={masters} onRefresh={refresh} onExport={doExport} exporting={exporting}/>
+    <div className="card">
+      <div style={{alignItems:"center",borderBottom:`1px solid ${T.border}`,display:"flex",flexWrap:"wrap",gap:10,justifyContent:"space-between",padding:"14px 16px"}}>
+        <strong style={{fontSize:14,color:T.text}}>Recent Requests</strong>
+        {(user.role==="technician"||user.role==="supervisor")&&<Btn onClick={onCreate}><I.plus size={16}/> Create New Request</Btn>}
+      </div>
+      {loading?<Loading label="Loading requests..."/>:<RequestTable rows={F.rows} onOpen={onOpen} sort={F.sort} onSort={F.onSort} masters={masters}/>}
+    </div>
+  </section>;
+}
+
+// ─────────────────────────── MY REQUESTS ───────────────────────────
+function MyRequests({user,records,masters,onOpen}){
+  const F=useRequestFilters(records,user,masters);
+  const [loading,refresh]=useRefresh();
+  const [exporting,doExport]=useExport(F.rows,masters,"My-Requests");
+  return <section>
+    <h2 className="pageTitle">My Requests</h2>
+    <FilterBar F={F} masters={masters} onRefresh={refresh} onExport={doExport} exporting={exporting}/>
+    <div className="card">{loading?<Loading label="Loading requests..."/>:<RequestTable rows={F.rows} onOpen={onOpen} sort={F.sort} onSort={F.onSort} showTechnician masters={masters} emptyLabel={user.role==="technician"?"You haven't created any requests yet.":undefined}/>}</div>
+  </section>;
+}
+
+// ─────────────────────────── PEOPLE PICKER (Entra ID) ───────────────────────────
+function PeoplePicker({value,onChange,branch}){
+  const [q,setQ]=useState(""),[open,setOpen]=useState(false);const ref=useRef(null);
+  useEffect(()=>{const h=e=>{if(ref.current&&!ref.current.contains(e.target))setOpen(false);};document.addEventListener("mousedown",h);return()=>document.removeEventListener("mousedown",h);},[]);
+  const sel=value?AD.find(p=>p.id===value):null;
+  const res=q.trim().length<1?[]:AD.filter(p=>(p.name+" "+p.email).toLowerCase().includes(q.trim().toLowerCase())).slice(0,10);
+  return <div className="pp" ref={ref}>
+    {sel?<span className="ppChip"><span className="ppAv">{initials(sel.name)}</span>{sel.name}<button type="button" className="ppX" title="Remove" onClick={()=>onChange(null)}>×</button></span>
+      :<input value={q} placeholder="Search directory user" onChange={e=>{setQ(e.target.value);setOpen(true);}} onFocus={()=>{ /* demo click-to-fill: pick a valid requestor for this branch */ if(!q.trim()&&branch){const p=demoRequestor(branch);if(p){onChange(p);return;}} setOpen(true);}}/>}
+    {!sel&&open&&q.trim()&&<div className="ppSug">
+      <div className="ppSugHead">{res.length?"Suggested contacts":"No results found"}</div>
+      {res.map(p=><div key={p.id} className="ppSugItem" onMouseDown={e=>{e.preventDefault();onChange(p);setQ("");setOpen(false);}}>
+        <span className="ppAv" style={{width:32,height:32,fontSize:11}}>{initials(p.name)}</span>
+        <div><div className="ppSugName">{p.name}</div><div className="ppSugSub">{p.email}</div></div></div>)}
+    </div>}
+  </div>;
+}
+
+// ─────────────────────────── CREATE / CHANGE REQUEST ───────────────────────────
+const STEPS=["Ticket Info","Request Type","Asset Details","Location"];
+const STEP_ICONS=[<I.doc size={20}/>,<I.clip size={20}/>,<I.check size={20}/>,<I.pin size={20}/>];
+function Stepper({current}){
+  return <div className="stepper">{STEPS.map((s,i)=><React.Fragment key={s}>
+    <div className={`step ${i===current?"stepActive":""} ${i<current?"stepDone":""}`}><div className="stepCircle">{STEP_ICONS[i]}</div><span>{s}</span></div>
+    {i<STEPS.length-1&&<div className={`stepLine ${i<current?"stepLineDone":""}`}/>}
+  </React.Fragment>)}</div>;
+}
+const blankAsset=()=>({equipmentTypeId:undefined,equipmentOther:"",model:"",serialNumber:"",rfidAssetId:""});
+const ls={get:k=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):undefined;}catch(e){return undefined;}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}},del:k=>{try{localStorage.removeItem(k);}catch(e){}}};
+
+function CreateRequest({user,masters,existing,onCancel,onSubmit}){
+  const isEdit=!!existing;
+  const draftKey=isEdit?`assetMovement.draft.edit.${existing.id}`:"assetMovement.draft.create";
+  const myBranches=(user.branches&&user.branches.length?user.branches:masters.branches.map(b=>b.code));
+  const branchOpts=masters.branches.filter(b=>b.isActive!==false&&myBranches.includes(b.code)).sort((a,b)=>(a.sortOrder||0)-(b.sortOrder||0));
+  const locked=myBranches.length===1;
+  const [step,setStep]=useState(0);
+  const [err,setErr]=useState(),[pickErr,setPickErr]=useState();
+  const [draft,setDraft]=useState(()=>ls.get(draftKey));
+  const [X,setX]=useState(()=>existing?{ticketNumber:existing.ticketNumber,requestType:existing.requestType,assets:existing.assets.map(a=>({...a})),branch:existing.branch,requestorId:existing.requestorId,requestorDepartment:existing.departmentLabel,reason:existing.reason}
+    :{ticketNumber:"",requestType:undefined,assets:[blankAsset()],branch:myBranches[0]||"INHQ",requestorId:undefined,requestorDepartment:"",reason:""});
+  const set=(k,v)=>setX(p=>({...p,[k]:v}));
+  const setAsset=(i,k,v)=>setX(p=>({...p,assets:p.assets.map((a,j)=>j===i?{...a,[k]:v}:a)}));
+  // auto-save draft every 30 s (as in dev build)
+  const snap=useRef();snap.current={step,form:X};
+  useEffect(()=>{const t=setInterval(()=>ls.set(draftKey,snap.current),30000);return()=>clearInterval(t);},[draftKey]);
+  // branch change → requestor must belong to the branch
+  const prevBranch=useRef(X.branch);
+  useEffect(()=>{if(prevBranch.current!==X.branch&&X.requestorId){const p=AD.find(x=>x.id===X.requestorId);if(p&&!companyBranches(p.company).includes(X.branch)){setPickErr(`${p.name} belongs to "${p.company}" — please pick a requestor from the ${branchLabel(X.branch,masters)} branch.`);setX(s=>({...s,requestorId:undefined,requestorDepartment:""}));}}prevBranch.current=X.branch;},[X.branch]);
+
+  const isReplace=X.requestType==="replace";
+  const sup=hasSupervisor(X.branch);
+  const needDetails=isReplace||!sup;
+  const eqOpts=masters.equipment.filter(e=>e.isActive!==false||X.assets.some(a=>a.equipmentTypeId===e.id)).sort((a,b)=>a.sortOrder-b.sortOrder);
+  const otherId=(masters.equipment.find(e=>e.title.toLowerCase()==="other")||{}).id;
+  const ok0=X.ticketNumber.trim().length>0&&Boolean(X.branch);
+  const ok1=Boolean(X.requestType);
+  const ok2=X.assets.length>0&&X.assets.every(a=>a.equipmentTypeId&&(a.equipmentTypeId!==otherId||a.equipmentOther.trim())&&(!needDetails||(a.model.trim()&&a.serialNumber.trim()&&a.rfidAssetId.trim())));
+  const ok3=Boolean(X.requestorId)&&Boolean(X.reason.trim());
+  const okStep=s=>[ok0,ok1,ok2,ok3][s];
+  // Demo "Auto Fill": fill every step of the wizard in one go, then jump to the last step
+  useDemoAutofill(()=>{
+    const type=X.requestType||"new";const capture=type==="replace"||!hasSupervisor(X.branch);
+    const pool=eqOpts.filter(e=>e.isActive!==false&&e.id!==otherId);
+    const p=X.requestorId?AD.find(x=>x.id===X.requestorId):demoRequestor(X.branch);
+    setX(s=>({...s,ticketNumber:s.ticketNumber.trim()||demoTicket(),requestType:type,
+      assets:s.assets.map(a=>{const t=a.equipmentTypeId?a:{...a,equipmentTypeId:pickOne(pool).id};const title=(masters.equipment.find(e=>e.id===t.equipmentTypeId)||{}).title||"";
+        return {...t,equipmentOther:t.equipmentTypeId===otherId&&!t.equipmentOther.trim()?pickOne(DEMO_OTHER):t.equipmentOther,
+          model:capture?(t.model.trim()||demoModel(title)):t.model,serialNumber:capture?(t.serialNumber.trim()||demoSerial()):t.serialNumber,rfidAssetId:capture?(t.rfidAssetId.trim()||demoRfid()):t.rfidAssetId};}),
+      requestorId:p?p.id:s.requestorId,requestorDepartment:p?p.dept:s.requestorDepartment,reason:s.reason.trim()||pickOne(DEMO_REASONS)}));
+    setPickErr(undefined);setErr(undefined);setStep(3);
+  });
+  const pick=p=>{
+    if(!p){setPickErr(undefined);setX(s=>({...s,requestorId:undefined,requestorDepartment:""}));return;}
+    if(!companyBranches(p.company).includes(X.branch)){setPickErr(`${p.name} belongs to "${p.company}" — please pick a requestor from the ${branchLabel(X.branch,masters)} branch.`);return;}
+    // Dev only fails this at Submit (with the error off-screen). Catch it at pick time instead.
+    if(!(p.dept||"").trim()){setPickErr(`${p.name} has no department on their directory profile, so the destination can't be set. Pick another requestor or ask IT to update the profile.`);return;}
+    setPickErr(undefined);setX(s=>({...s,requestorId:p.id,requestorDepartment:p.dept}));
+  };
+  const submit=()=>{
+    try{
+      if(!X.requestType)throw new Error("Request type is required.");
+      if(X.assets.some(a=>!a.equipmentTypeId))throw new Error("Each asset must have an equipment type.");
+      if(!X.requestorId)throw new Error("A valid requestor must be selected from directory.");
+      if(!X.requestorDepartment.trim())throw new Error("Could not determine the requestor's department from the directory.");
+      ls.del(draftKey);
+      onSubmit({...X,assets:X.assets.map(a=>({...a,equipmentOther:a.equipmentTypeId===otherId?a.equipmentOther.trim():""}))});
+    }catch(e){setErr(e.message);setTimeout(()=>{const el=document.getElementById("formErr");if(el)el.scrollIntoView({behavior:"smooth",block:"center"});},50);}
+  };
+  const today=todayD();
+  return <section>
+    <button className="backLink" onClick={onCancel}><I.arrowL size={16}/> {isEdit?"Back":"Back to Dashboard"}</button>
+    <h2 className="pageTitle" style={{marginBottom:4}}>{isEdit?"Change Request":"Create New Request"}</h2>
+    <div className="muted" style={{marginBottom:16}}>{isEdit?"Edit this request. Saving restarts its approval path.":"Submit a new asset request or replacement."}</div>
+    {draft&&<div className="msgInfo" style={{maxWidth:980}}><span style={{flex:1}}>A saved draft was found for this form. Do you want to restore it?</span>
+      <Btn kind="primary" onClick={()=>{setX(draft.form);setStep(draft.step||0);setDraft(undefined);}}>Restore</Btn>
+      <Btn kind="ghost" onClick={()=>{ls.del(draftKey);setDraft(undefined);}}>Discard</Btn></div>}
+    {err&&step!==3&&<ErrorBar message={err}/>}
+    <div className="card cardPad formCard">
+      <Stepper current={step}/>
+      {step===0&&<div className="formStep">
+        <div className="sectionTitle">Ticket Information</div>
+        <Field label="Ticket Number" req hint="Free text — the SDP ticket number raised by the requester." style={{maxWidth:460}}>
+          <input className="input" style={{minHeight:0,height:34,boxSizing:"border-box",fontSize:13,padding:"4px 10px"}} value={X.ticketNumber} onChange={e=>set("ticketNumber",e.target.value)} placeholder="SDP-81245-26"/>
+        </Field>
+        <Field label="Branch" req sm>
+          <select className={`select ${locked?"disabledField":""}`} value={X.branch} disabled={locked} onChange={e=>set("branch",e.target.value)}>{branchOpts.map(b=><option key={b.code} value={b.code}>{b.title}</option>)}</select>
+          {locked&&<div className="hint">Locked to your branch — you can only raise requests for your own branch.</div>}
+          {myBranches.length>1&&<div className="hint">You can raise requests for any of your branches.</div>}
+        </Field>
+      </div>}
+      {step===1&&<div className="formStep">
+        <div className="sectionTitle">Select Request Type</div>
+        {REQUEST_TYPES.map(rt=>{const s=X.requestType===rt.key;return <button key={rt.key} type="button" onClick={()=>set("requestType",rt.key)} className={`typeCard ${s?"typeCardSelected":""}`}>
+          <div className="typeCardInner"><span className={`radioDot ${s?"radioDotSelected":""}`}>{s&&<span className="radioDotInner"/>}</span>
+            <span><span className="typeLabel">{rt.label}</span><span className="typeDesc" style={{display:"block"}}>{!sup?(rt.key==="new"?"Request a completely new asset for your department. Requires IT Manager approval.":"Replace or exchange an existing asset. Tech Park has no IT Supervisor — goes to the IT Manager."):rt.description}</span></span></div>
+        </button>;})}
+      </div>}
+      {step===2&&<div className="formStep">
+        <div className="sectionTitle">Asset Details</div>
+        {needDetails&&!isReplace&&<div className="hint" style={{marginBottom:10}}>Tech Park has no IT Supervisor — please enter each allocated asset's details now.</div>}
+        {X.assets.map((a,i)=><div className="assetRow" key={i}>
+          <div className="assetRowHead"><span className="assetRowTitle">Asset {i+1}</span>
+            {X.assets.length>1&&<button type="button" className="assetRemove" title="Remove asset" onClick={()=>setX(p=>({...p,assets:p.assets.filter((_,j)=>j!==i)}))}><I.x size={16}/></button>}</div>
+          <Field label="Equipment Type" req sm><select className="select" value={a.equipmentTypeId?String(a.equipmentTypeId):""} onChange={e=>setAsset(i,"equipmentTypeId",e.target.value?Number(e.target.value):undefined)}><option value="">Select</option>{eqOpts.map(t=><option key={t.id} value={t.id}>{t.title}</option>)}</select></Field>
+          {a.equipmentTypeId===otherId&&<Field label="Specify Equipment" req sm><input className="input" value={a.equipmentOther} onChange={e=>setAsset(i,"equipmentOther",e.target.value)} placeholder="e.g. Projector"/></Field>}
+          {needDetails&&<>
+            <Field label="Model Number" req sm><input className="input" value={a.model} onChange={e=>setAsset(i,"model",e.target.value)} placeholder="e.g. Dell OptiPlex 7090"/></Field>
+            <Field label="Serial Number" req sm><input className="input" value={a.serialNumber} onChange={e=>setAsset(i,"serialNumber",e.target.value)} placeholder="e.g. SN-211322-2627"/></Field>
+            <Field label="RFID # / Asset ID" req sm style={{marginBottom:0}}><input className="input" value={a.rfidAssetId} onChange={e=>setAsset(i,"rfidAssetId",e.target.value)} placeholder="e.g. RFID-8801-26"/></Field>
+          </>}
+        </div>)}
+        <Btn kind="ghost" onClick={()=>setX(p=>({...p,assets:[...p.assets,blankAsset()]}))}><I.plus size={16}/> Add asset</Btn>
+      </div>}
+      {step===3&&<div className="formStep">
+        <div className="sectionTitle">Location Details</div>
+        {!isReplace&&<Field label="Old Location" sm hint="Assets always originate from the IT Store."><input className="input disabledField" disabled value="IT Store"/></Field>}
+        <Field label="Requestor Name" req style={{maxWidth:460}}>
+          <PeoplePicker value={X.requestorId} onChange={pick} branch={X.branch}/>
+          {pickErr&&<div style={{color:"#a4262c",fontSize:12,marginTop:4,fontWeight:600}}>{pickErr}</div>}
+          <div className="hint">Search Active Directory (Entra ID). Their department is captured automatically.</div>
+        </Field>
+        <Field label={isReplace?"New Location (Department)":"Destination Department"} req sm hint="Taken automatically from the requestor's Active Directory department."><input className="input disabledField" disabled value={X.requestorDepartment||""}/></Field>
+        {isReplace&&<Field label="Technician Name" req sm hint="Logged-in technician — from Active Directory."><input className="input disabledField" disabled value={existing?existing.technicianNameLabel:user.name}/></Field>}
+        <Field label={isReplace?"Asset Assignment Date":"Date"} req sm hint="Set automatically to the current date."><input type="date" className="input disabledField" disabled value={today}/></Field>
+        <Field label="Reason" req><textarea className="textarea" value={X.reason} onChange={e=>set("reason",e.target.value)} placeholder="Please provide detailed justification for this request..."/></Field>
+      </div>}
+      {err&&step===3&&<div id="formErr" style={{marginTop:16}}><ErrorBar message={err}/></div>}
+      <div style={{display:"flex",justifyContent:"space-between",marginTop:22,paddingTop:18,borderTop:`1px solid ${T.borderLight}`}}>
+        <Btn kind="ghost" onClick={()=>step===0?onCancel():setStep(s=>s-1)}><I.arrowL size={16}/> {step===0?(isEdit?"Back":"Back to Dashboard"):"Previous"}</Btn>
+        {step<3?<Btn onClick={()=>setStep(s=>s+1)} disabled={!okStep(step)}>Next <I.arrowR size={16}/></Btn>
+          :<Btn kind="green" onClick={submit} disabled={!ok3}><I.check size={18}/> {isEdit?"Save Changes":"Submit Request"}</Btn>}
+      </div>
+    </div>
+  </section>;
+}
+
+// ─────────────────────────── FILL ASSET DETAILS ───────────────────────────
+function FillAssets({rec,masters,onBack,onSubmit}){
+  const [assets,setAssets]=useState(rec.assets.map(a=>({...a})));
+  const set=(i,k,v)=>setAssets(p=>p.map((a,j)=>j===i?{...a,[k]:v}:a));
+  const valid=assets.every(a=>a.model.trim()&&a.serialNumber.trim()&&a.rfidAssetId.trim());
+  useDemoAutofill(()=>setAssets(p=>p.map(a=>({...a,model:a.model.trim()||demoModel(eqLabel(a,masters)),serialNumber:a.serialNumber.trim()||demoSerial(),rfidAssetId:a.rfidAssetId.trim()||demoRfid()}))));
+  return <section>
+    <button className="backLink" onClick={onBack}><I.arrowL size={16}/> Back</button>
+    <h2 className="pageTitle" style={{marginBottom:3}}>Fill Asset Details</h2>
+    <div className="muted" style={{marginBottom:16}}>{rec.requestId} · {summary(rec,masters)} · {rec.departmentLabel}</div>
+    <div className="card cardPad" style={{maxWidth:680}}>
+      {assets.map((a,i)=><div className="assetRow" key={i}>
+        <div className="assetRowHead"><span className="assetRowTitle">{assets.length>1?`Asset ${i+1} · `:""}{eqLabel(a,masters)}</span></div>
+        <Field label="Model" req><input className="input" value={a.model} onChange={e=>set(i,"model",e.target.value)} placeholder="e.g. Dell OptiPlex 7090"/></Field>
+        <Field label="Serial Number" req><input className="input" value={a.serialNumber} onChange={e=>set(i,"serialNumber",e.target.value)} placeholder="e.g. SN-211322-2627"/></Field>
+        <Field label="RFID # / Asset ID" req style={{marginBottom:0}}><input className="input" value={a.rfidAssetId} onChange={e=>set(i,"rfidAssetId",e.target.value)} placeholder="e.g. RFID-8801-26"/></Field>
+      </div>)}
+      <Field label="Requestor Name" hint="Carried over from the original request."><input className="input disabledField" disabled value={rec.requestorNameLabel}/></Field>
+      <Field label="New Location" hint="Picked from the original request — the destination department for this asset."><input className="input disabledField" disabled value={rec.newLocation||rec.departmentLabel}/></Field>
+      <div className="buttonRow" style={{justifyContent:"space-between",marginTop:22,paddingTop:18,borderTop:`1px solid ${T.borderLight}`}}>
+        <Btn kind="dangerGhost" onClick={onBack}><I.x size={18}/> Cancel</Btn>
+        <Btn kind="green" disabled={!valid} onClick={()=>onSubmit(assets)}><I.check size={18}/> Submit</Btn>
+      </div>
+    </div>
+  </section>;
+}
+
+// ─────────────────────────── REQUEST DETAIL ───────────────────────────
+const ActCard=({color,title,help,children,demo})=><div className={`actionCard ${demo?"demoCard":""}`} style={{borderLeftColor:color,background:demo?undefined:"#fff"}}><div className="actionTitle">{title}{demo&&<span className="demoTag">PROTOTYPE ONLY</span>}</div><div className="actionHelp">{help}</div>{children}</div>;
+function ActionPanel({rec,user,onAction,onRemind,onEdit,onFill}){
+  const [comment,setComment]=useState("");
+  const isOwner=rec.createdByTechnicianId===user.id;
+  const sup=hasSupervisor(rec.branch);
+  const L=availableActions(user.role,rec.status,rec.requestType,isOwner,sup);
+  const has=a=>L.includes(a);
+  const mgr=has("manager_approve")||has("manager_reject"),spv=has("supervisor_approve")||has("supervisor_reject");
+  const fill=has("submit_details"),deliver=has("mark_delivered"),awaiting=rec.status==="pending_confirmation",rejected=has("resubmit");
+  const change=has("change_request")&&["pending_manager","pending_supervisor"].includes(rec.status);
+  const remind=IN_PROGRESS.includes(rec.status)&&(isOwner||user.role==="admin");
+  const sentToday=isToday(rec.reminderRequestedAt);
+  const lastRem=rec.timeline.filter(e=>e.action==="manual_reminder").sort((a,b)=>b.actionDate.localeCompare(a.actionDate))[0];
+  const waiting=WAITING_ON[rec.status]||"the current approver";
+  const act=a=>{onAction(a,comment);setComment("");};
+  useDemoAutofill(()=>{if(!document.querySelector(".actionCard textarea"))return false;setComment(c=>c.trim()?c:pickOne(DEMO_COMMENTS));});
+  const Card=ActCard;
+  const Comment=({label,ph})=><div style={{marginBottom:12}}><label className="fieldLabel">{label}</label><textarea className="textarea" value={comment} onChange={e=>setComment(e.target.value)} placeholder={ph}/></div>;
+  return <section>
+    {mgr&&<Card color={T.primary} title="IT Manager Approval" help={sup?"Approve to return the request to the IT Technician for asset details, or reject.":"Asset details were captured up front. Approve — the device then moves to delivery and the requestor confirms receipt to complete. Or reject."}>
+      {Comment({label:"Comment (required to reject)",ph:"Comment (required for reject)."})}
+      <div className="buttonRow"><Btn kind="green" onClick={()=>act("manager_approve")}><I.check size={18}/> Approve</Btn><Btn kind="dangerGhost" disabled={!comment.trim()} onClick={()=>act("manager_reject")}><I.x size={18}/> Reject</Btn></div></Card>}
+    {spv&&<Card color={T.primary} title="IT Supervisor Approval" help={rec.requestType==="replace"?"Asset details were captured up front by the Technician. Approve — the device then moves to delivery and the requestor confirms receipt to complete.":"Asset details have been filled by the Technician. Approve — the device then moves to delivery and the requestor confirms receipt to complete."}>
+      {Comment({label:"Comment (required to reject)",ph:"Comment (required for reject)."})}
+      <div className="buttonRow"><Btn kind="green" onClick={()=>act("supervisor_approve")}><I.check size={18}/> Approve &amp; Complete</Btn><Btn kind="dangerGhost" disabled={!comment.trim()} onClick={()=>act("supervisor_reject")}><I.x size={18}/> Reject</Btn></div></Card>}
+    {fill&&<Card color={T.purple} title="Fill Asset Details" help={rec.requestType==="new"?"Request approved. Enter the allocated asset's details — it then goes to the IT Supervisor for final approval.":"Request approved. Enter the allocated asset's details to complete."}>
+      <Btn kind="primary" onClick={onFill}><I.clip size={18}/> Fill Asset Details</Btn></Card>}
+    {deliver&&<Card color={T.amber} title="Deliver to Requestor" help={<>{sup?"Approved by the IT Supervisor. ":"Approved by the IT Manager. "}Hand the device over to the requestor, then mark it as delivered — a confirmation email is sent to {rec.requestorNameLabel||"the requestor"} asking them to confirm receipt. The request completes once they confirm.</>}>
+      <Btn kind="green" onClick={()=>act("mark_delivered")}><I.check size={18}/> Mark as Delivered</Btn></Card>}
+    {awaiting&&<Card color={T.info} title="Awaiting Requestor Confirmation" help={<>The device was marked delivered and a confirmation email has been sent to {rec.requestorNameLabel||"the requestor"}. The request completes automatically once they confirm receipt from that email.</>}/>}
+    {awaiting&&<Card demo color="#94a3b8" title="Simulate Requestor Email" help={<>In production {rec.requestorNameLabel} clicks <b>Confirm Receipt</b> in the email (Power Automate approval). Use this button to simulate it.</>}>
+      <Btn kind="ghost" onClick={()=>act("requestor_confirm")}><I.check size={18}/> Confirm Receipt as {rec.requestorNameLabel}</Btn></Card>}
+    {rejected&&<Card color={T.warn} title="Request Rejected — Returned to You" help="Review the rejection reason in the history, then edit & resubmit, or cancel the request.">
+      {Comment({label:"Note (optional)",ph:"Note on what changed (optional)."})}
+      <div className="buttonRow"><Btn kind="ghost" onClick={onEdit}>✎ Edit</Btn><Btn kind="primary" onClick={()=>act("resubmit")}>↻ Resubmit Request</Btn><Btn kind="dangerGhost" onClick={()=>act("cancel")}><I.x size={18}/> Cancel Request</Btn></div></Card>}
+    {change&&<Card color={T.info} title="Change Request" help="This request is still in flight. You can edit its details — saving changes restarts its approval path so approvers re-confirm.">
+      <div className="buttonRow"><Btn kind="primary" onClick={onEdit}>✎ Edit Request</Btn><Btn kind="dangerGhost" onClick={()=>act("cancel")}><I.x size={18}/> Cancel Request</Btn></div></Card>}
+    {remind&&<Card color={T.amber} title="Send Reminder" help={sentToday?"A reminder has already been sent for this request today — the next one can be sent tomorrow. Automatic reminders continue separately.":`Email the ${waiting} a reminder that this request is waiting on them. Use this if the automatic reminders were missed or deleted, or if you need to chase it now. One reminder per request per day.`}>
+      {sentToday&&<div className="muted" style={{marginBottom:12}}>Last sent {fmtDT(rec.reminderRequestedAt)}{lastRem?` by ${lastRem.actorName}`:""}.</div>}
+      <Btn kind="ghost" disabled={sentToday} title={sentToday?"Already sent today — available again tomorrow.":undefined} onClick={onRemind}><I.bell size={18}/> {sentToday?"Reminder Sent Today":"Send Reminder"}</Btn></Card>}
+  </section>;
+}
+
+function Detail({rec,user,masters,onBack,onAction,onRemind,onEdit,onFill}){
+  const Row=({label,value})=>value?<div className="detailRow"><div className="detailRowKey">{label}</div><div className="detailRowVal">{value}</div></div>:null;
+  const hasAssets=rec.assets.some(a=>a.model||a.serialNumber||a.rfidAssetId);
+  const showAssign=["pending_delivery","pending_confirmation","completed"].includes(rec.status)&&Boolean(rec.assignmentDate);
+  const tl=rec.timeline.slice().sort((a,b)=>a.actionDate.localeCompare(b.actionDate)||a.id-b.id);
+  return <section>
+    <button className="backLink" onClick={onBack}><I.arrowL size={16}/> Back</button>
+    <div style={{alignItems:"center",display:"flex",gap:12,marginBottom:16,flexWrap:"wrap"}}>
+      <span style={{color:T.text,fontSize:20,fontWeight:700}}>{rec.requestId}</span><StatusPill status={rec.status}/>
+      {isOverdue(rec)&&<span style={{fontSize:10,padding:"2px 7px",borderRadius:3,background:T.err,color:"#fff",fontWeight:700,letterSpacing:.5}}>OVERDUE</span>}
+    </div>
+    <div className="detailGrid">
+      <div>
+        <div className="card cardPad" style={{marginBottom:16}}>
+          <div className="sectionTitle">Request Details</div>
+          <Row label="Ticket Number" value={rec.ticketNumber}/>
+          <Row label="Request Type" value={typeLabel(rec.requestType)}/>
+          <Row label="Equipment Type" value={summary(rec,masters)}/>
+          <Row label="Branch" value={branchLabel(rec.branch,masters)}/>
+          <Row label="Department" value={rec.departmentLabel}/>
+          <Row label="Requested By" value={rec.requestorNameLabel}/>
+          <Row label="Technician" value={rec.technicianNameLabel}/>
+          <Row label="Date" value={fmtDT(rec.requestDate)}/>
+          <Row label="Last Updated" value={fmtDT(rec.modified)}/>
+          {IN_PROGRESS.includes(rec.status)&&<Row label="Due Date" value={<span style={{color:isOverdue(rec)?T.err:T.text,fontWeight:isOverdue(rec)?600:400}}>{fmtD(rec.dueDate)} · waiting on {WAITING_ON[rec.status]}</span>}/>}
+          {rec.deliveredAt&&<Row label="Delivered At" value={fmtDT(rec.deliveredAt)}/>}
+          {rec.confirmedAt&&<Row label="Confirmed At" value={fmtDT(rec.confirmedAt)}/>}
+          <Row label="Reason" value={rec.reason}/>
+        </div>
+        <div className="card cardPad">
+          <div className="sectionTitle">Asset Details</div>
+          {hasAssets?<>
+            <div className="assetTableWrap"><table className="assetTable"><thead><tr><th>Equipment Type</th><th>Model</th><th>Serial Number</th><th>RFID # / Asset ID</th></tr></thead>
+              <tbody>{rec.assets.map((a,i)=><tr key={i}><td>{eqLabel(a,masters)}</td><td>{a.model||"-"}</td><td>{a.serialNumber||"-"}</td><td>{a.rfidAssetId||"-"}</td></tr>)}</tbody></table></div>
+            {showAssign&&<Row label="Assignment Date" value={fmtD(rec.assignmentDate)}/>}
+          </>:<>
+            <div className="assetTableWrap"><table className="assetTable"><thead><tr><th>Equipment Type</th></tr></thead><tbody>{rec.assets.map((a,i)=><tr key={i}><td>{eqLabel(a,masters)}</td></tr>)}</tbody></table></div>
+            <div style={{color:T.textMut,fontSize:12,fontStyle:"italic"}}>Not yet assigned — Model / Serial / RFID are captured by the IT Technician after approval.</div></>}
+        </div>
+      </div>
+      <div>
+        <ActionPanel key={rec.status} rec={rec} user={user} onAction={onAction} onRemind={onRemind} onEdit={onEdit} onFill={onFill}/>
+        <div className="card cardPad">
+          <div className="sectionTitle" style={{marginBottom:4}}>History</div>
+          <div className="muted" style={{marginBottom:12}}>Full version &amp; audit trail — captured automatically.</div>
+          {tl.length===0&&<div className="muted">No timeline entries found.</div>}
+          <div className="timelineV">{tl.map((e,i)=>{const last=i===tl.length-1,c=T.primary;
+            return <div className="timelineVItem" key={e.id} style={{paddingBottom:last?0:18}}>
+              <span className="timelineVDot" style={{background:c,boxShadow:`0 0 0 1px ${c}`}}/>
+              {!last&&<span className="timelineVLine" style={{background:T.border}}/>}
+              <div className="timelineVAction">{HISTORY_LABEL[e.action]||e.action}</div>
+              <div className="timelineVMeta">{e.actorName||"System"}{e.actorRole&&e.actorRole!=="system"?` · ${ROLE_TITLE[e.actorRole]||e.actorRole}`:""} · {fmtDT(e.actionDate)}</div>
+              {e.note&&<div className="timelineNote" style={{borderLeftColor:c,fontStyle:"italic"}}>{e.note}</div>}
+            </div>;})}</div>
+        </div>
+      </div>
+    </div>
+  </section>;
+}
+
+// ─────────────────────────── NOTIFICATIONS ───────────────────────────
+function deriveNotifications(records,user){
+  const out=[];
+  records.forEach(e=>{
+    if(e.status==="completed"||e.status==="cancelled")return;
+    const od=isOverdue(e),tag=od?" (OVERDUE)":"",own=e.createdByTechnicianId===user.id,pr=od?"high":"medium",d=e.modified||e.requestDate,r=user.role;
+    if(r==="manager"&&e.status==="pending_manager")out.push({id:`${e.id}-mgr`,reqId:e.requestId,rec:e,msg:`New request awaiting your approval${tag}`,date:d,type:"action",priority:pr});
+    if(r==="supervisor"&&e.status==="pending_supervisor")out.push({id:`${e.id}-sup`,reqId:e.requestId,rec:e,msg:`Request awaiting your approval${tag}`,date:d,type:"action",priority:pr});
+    if(r==="technician"&&e.status==="pending_details"&&own)out.push({id:`${e.id}-det`,reqId:e.requestId,rec:e,msg:`Approved — please enter asset details${tag}`,date:d,type:"action",priority:pr});
+    if(r==="technician"&&e.status==="rejected"&&own)out.push({id:`${e.id}-rej`,reqId:e.requestId,rec:e,msg:"Your request was returned — resubmit or cancel",date:d,type:"alert",priority:"high"});
+    if(e.status==="pending_delivery"&&own)out.push({id:`${e.id}-del`,reqId:e.requestId,rec:e,msg:`Approved — deliver the device to the requestor and mark it delivered${tag}`,date:d,type:"action",priority:pr});
+    if(r==="admin"&&od)out.push({id:`${e.id}-adm`,reqId:e.requestId,rec:e,msg:`Overdue — waiting on the ${WAITING_ON[e.status]} since ${fmtD(e.stageEnteredAt)}`,date:d,type:"alert",priority:"high"});
+    if(e.status==="pending_confirmation"&&own)out.push({id:`${e.id}-cfm`,reqId:e.requestId,rec:e,msg:"Delivered — awaiting the requestor's email confirmation of receipt",date:d,type:"alert",priority:"medium"});
+  });
+  return out.sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+}
+function Notifications({notifications,userName,onOpen}){
+  const [tab,setTab]=useState("all");
+  const meta={action:{color:T.warn,bg:`${T.warn}15`,label:"ACTION"},alert:{color:T.info,bg:`${T.info}15`,label:"ALERT"}};
+  const tabs=[{key:"all",label:"All",icon:"📬"},{key:"action",label:"Action Required",icon:"⏳"},{key:"alert",label:"Alerts",icon:"⚠️"}];
+  const cnt={all:notifications.length,action:notifications.filter(n=>n.type==="action").length,alert:notifications.filter(n=>n.type==="alert").length};
+  const urgent=notifications.filter(n=>n.priority==="high").length;
+  const list=tab==="all"?notifications:notifications.filter(n=>n.type===tab);
+  return <div style={{maxWidth:1100}}>
+    <div style={{marginBottom:20}}>
+      <h1 style={{fontSize:18,fontWeight:600,color:T.text,margin:0}}>🔔 Notifications</h1>
+      <p style={{fontSize:12,color:T.textSec,margin:"2px 0 0"}}>{notifications.length===0?"All caught up — no notifications right now":`${notifications.length} notification${notifications.length>1?"s":""} for ${userName}`}{urgent>0?` · ${urgent} urgent`:""}</p>
+    </div>
+    <div style={{display:"flex",gap:0,borderBottom:`2px solid ${T.border}`,marginBottom:16,overflowX:"auto"}}>
+      {tabs.map(t=>{const a=tab===t.key;return <button key={t.key} onClick={()=>setTab(t.key)} aria-pressed={a} style={{padding:"10px 16px",minHeight:44,border:"none",background:"none",fontSize:12,fontWeight:a?600:400,color:a?T.primary:T.textSec,borderBottom:a?`2px solid ${T.primary}`:"2px solid transparent",cursor:"pointer",marginBottom:-2,fontFamily:T.font,display:"flex",alignItems:"center",gap:6,whiteSpace:"nowrap"}}>
+        <span style={{fontSize:14}}>{t.icon}</span><span>{t.label}</span>
+        {cnt[t.key]>0&&<span style={{fontSize:10,padding:"1px 7px",borderRadius:9,background:a?`${T.primary}20`:"#e5e7eb",color:a?T.primary:T.textSec,fontWeight:600}}>{cnt[t.key]}</span>}</button>;})}
+    </div>
+    {list.length===0?<div style={{background:T.cardBg,border:`1px solid ${T.border}`,borderRadius:10,padding:60,textAlign:"center",color:T.textMut}}>
+        <div style={{fontSize:60,marginBottom:14}}>{tab==="all"?"✨":"📭"}</div>
+        <div style={{fontSize:15,fontWeight:600,color:T.text}}>{tab==="all"?"You're all caught up!":`No ${tab==="action"?"actions":"alerts"} right now`}</div>
+        <div style={{fontSize:11,color:T.textSec,marginTop:8}}>{tab==="all"?"No notifications need your attention.":"Try a different filter to see other notifications."}</div></div>
+      :<div style={{display:"flex",flexDirection:"column",gap:10}}>{list.map(n=>{const m=meta[n.type]||meta.alert,hi=n.priority==="high";
+        return <div key={n.id} onClick={()=>onOpen(n.rec.id)} style={{background:hi?"#fff5f5":"#fff",border:`1px solid ${T.border}`,borderLeft:`4px solid ${hi?T.err:m.color}`,borderRadius:10,boxShadow:"0 1px 3px rgba(0,0,0,0.05)",padding:14,cursor:"pointer",transition:"all 0.15s"}} onMouseEnter={e=>e.currentTarget.style.background=hi?"#fee2e2":T.primaryLight} onMouseLeave={e=>e.currentTarget.style.background=hi?"#fff5f5":"#fff"}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12,flexWrap:"wrap"}}>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6,flexWrap:"wrap"}}>
+                {hi&&<span style={{fontSize:10,padding:"2px 7px",borderRadius:3,background:T.err,color:"#fff",fontWeight:700,letterSpacing:.5}}>HIGH</span>}
+                <span style={{fontSize:10,padding:"2px 7px",borderRadius:3,background:m.bg,color:m.color,fontWeight:600,letterSpacing:.3}}>{m.label}</span>
+                <span style={{fontSize:12,fontWeight:600,color:T.primary}}>{n.reqId}</span>
+                {n.rec.requestType==="replace"&&<span style={{fontSize:10,padding:"2px 7px",borderRadius:3,background:`${T.info}20`,color:T.info,fontWeight:600}}>🔄 Replacement</span>}
+              </div>
+              <div style={{fontSize:13,color:T.text,lineHeight:1.4,fontWeight:500}}>{n.msg}</div>
+              <div style={{display:"flex",gap:14,marginTop:8,fontSize:11,color:T.textSec,flexWrap:"wrap"}}><span>📅 {fmtD(n.date)}</span><span>🏢 {n.rec.departmentLabel||"—"}</span>{n.rec.branch&&<span>📍 {n.rec.branch}</span>}</div>
+            </div>
+            <button onClick={e=>{e.stopPropagation();onOpen(n.rec.id);}} style={{padding:"9px 14px",minHeight:44,borderRadius:6,border:`1px solid ${T.primary}`,background:T.primary,color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",whiteSpace:"nowrap",fontFamily:T.font}}>Open Request →</button>
+          </div></div>;})}</div>}
+  </div>;
+}
+
+// ─────────────────────────── SETUP (master lists) ───────────────────────────
+function Setup({user,masters,setMasters,onToast}){
+  const tab="equipment"; // dev Setup exposes Equipment Types only
+  const cfg=MASTER_CFG[tab];
+  const items=masters[tab].slice().sort((a,b)=>(cfg.hasSortOrder?(a.sortOrder||0)-(b.sortOrder||0):0)||a.title.localeCompare(b.title));
+  const [panel,setPanel]=useState(null); // {mode:'add'|'edit', item}
+  const [form,setForm]=useState({});const [ferr,setFerr]=useState();
+  const [del,setDel]=useState(null);
+  const openAdd=()=>{setForm({title:"",code:"",branch:"",sortOrder:(items.reduce((m,i)=>Math.max(m,i.sortOrder||0),0)||0)+1,isActive:true});setFerr();setPanel({mode:"add"});};
+  const openEdit=it=>{setForm({...it});setFerr();setPanel({mode:"edit",item:it});};
+  const save=()=>{
+    if(!form.title||!form.title.trim())return setFerr("Title is required.");
+    if(cfg.hasCode&&!(form.code||"").trim())return setFerr("Code is required.");
+    if(masters[tab].some(x=>x.title.trim().toLowerCase()===form.title.trim().toLowerCase()&&(!panel.item||x.id!==panel.item.id)))return setFerr(`A ${cfg.singular.toLowerCase()} with this title already exists.`);
+    const now=nowISO();
+    setMasters(m=>({...m,[tab]:panel.mode==="add"?[...m[tab],{...form,title:form.title.trim(),id:Math.max(0,...m[tab].map(x=>x.id))+1,createdBy:user.name,createdAt:now,modifiedBy:user.name,modifiedAt:now}]
+      :m[tab].map(x=>x.id===panel.item.id?{...x,...form,title:form.title.trim(),modifiedBy:user.name,modifiedAt:now}:x)}));
+    setPanel(null);onToast("Changes saved.","success");
+  };
+  useDemoAutofill(()=>{if(!panel)return false;const used=new Set(masters[tab].map(x=>x.title.toLowerCase()));const t=DEMO_TYPES.find(x=>!used.has(x.toLowerCase()))||`Demo Item ${rnd(900)+100}`;setForm(f=>({...f,title:(f.title||"").trim()||t,code:cfg.hasCode?((f.code||"").trim()||"IN"+t.slice(0,2).toUpperCase()):f.code}));setFerr();});
+  const doDelete=()=>{setMasters(m=>({...m,[tab]:m[tab].filter(x=>x.id!==del.id)}));onToast(`"${del.title}" deleted.`,"success");setDel(null);};
+  const cols=1+(cfg.hasCode?1:0)+(cfg.hasBranch?1:0)+(cfg.hasSortOrder?1:0)+(cfg.hasIsActive?1:0)+3;
+  const th={cursor:"default"};
+  return <section>
+    <h2 className="pageTitle">Setup</h2>
+    <div className="pageDesc">{cfg.desc}</div>
+    <div className="card">
+      <div className="cardHeadRow"><span className="cardHeadTitle">{cfg.tab}</span><Btn kind="primary" onClick={openAdd}><I.plus size={16}/> Add</Btn></div>
+      <div className="tableWrap"><table className="table"><thead><tr>
+        <th className="th" style={th}>Title</th>{cfg.hasCode&&<th className="th" style={th}>Code</th>}{cfg.hasBranch&&<th className="th" style={th}>Branch</th>}{cfg.hasSortOrder&&<th className="th" style={th}>Sort Order</th>}{cfg.hasIsActive&&<th className="th" style={th}>Status</th>}
+        <th className="th" style={th}>Added by</th><th className="th" style={th}>Last updated</th><th className="th" style={{...th,textAlign:"right"}}>Actions</th></tr></thead>
+        <tbody>
+          {items.length===0&&<tr><td colSpan={cols} className="td" style={{textAlign:"center"}}>No items yet. Use “Add” to create one.</td></tr>}
+          {items.map(e=>{const muted=cfg.hasIsActive&&e.isActive===false;return <tr key={e.id} className={muted?"rowMuted":undefined}>
+            <td className="td">{e.title}</td>
+            {cfg.hasCode&&<td className="td">{e.code||"-"}</td>}
+            {cfg.hasBranch&&<td className="td">{e.branch?branchLabel(e.branch,masters):"All branches"}</td>}
+            {cfg.hasSortOrder&&<td className="td">{e.sortOrder||0}</td>}
+            {cfg.hasIsActive&&<td className="td"><span className={`statusPill ${e.isActive===false?"statusPillInactive":"statusPillActive"}`}>{e.isActive===false?"Inactive":"Active"}</span></td>}
+            <td className="td">{e.createdBy||"-"}{e.createdAt&&<div style={{color:T.textMut,fontSize:11}}>{new Date(e.createdAt).toLocaleDateString()}</div>}</td>
+            <td className="td">{e.modifiedBy||"-"}{e.modifiedAt&&<div style={{color:T.textMut,fontSize:11}}>{new Date(e.modifiedAt).toLocaleDateString()}</div>}</td>
+            <td className="td" style={{textAlign:"right"}}><span className="rowActions">
+              <button type="button" className="iconBtn" title="Edit" aria-label={`Edit ${e.title}`} onClick={()=>openEdit(e)}><I.edit size={16}/></button>
+              <button type="button" className="iconBtn iconBtnDanger" title="Delete" aria-label={`Delete ${e.title}`} onClick={()=>setDel(e)}><I.trash size={16}/></button></span></td>
+          </tr>;})}
+        </tbody></table></div>
+    </div>
+    {panel&&<><div className="overlay" onClick={()=>setPanel(null)}/><div className="panel" role="dialog">
+      <div className="panelHead"><span className="panelTitle">{panel.mode==="add"?`Add ${cfg.singular}`:`Edit ${cfg.singular}`}</span><button className="ppX" style={{width:32,height:32,fontSize:18}} onClick={()=>setPanel(null)} aria-label="Close"><I.close size={16}/></button></div>
+      <div className="panelBody"><div style={{paddingTop:12,display:"flex",flexDirection:"column",gap:14}}>
+        {ferr&&<ErrorBar message={ferr}/>}
+        <div><label className="fLabel">Title<span className="r">*</span></label><input className="fInput" value={form.title||""} onChange={e=>setForm(f=>({...f,title:e.target.value}))}/></div>
+        {cfg.hasCode&&<div><label className="fLabel">Code<span className="r">*</span></label><input className="fInput" placeholder="e.g. INHQ" value={form.code||""} onChange={e=>setForm(f=>({...f,code:e.target.value.toUpperCase()}))}/></div>}
+        {cfg.hasBranch&&<div><label className="fLabel">Branch</label><select className="fInput" value={form.branch||""} onChange={e=>setForm(f=>({...f,branch:e.target.value}))}><option value="">All branches</option>{masters.branches.map(b=><option key={b.code} value={b.code}>{b.title}</option>)}</select></div>}
+        {cfg.hasSortOrder&&<div><label className="fLabel">Sort Order</label><input type="number" min="0" step="1" className="fInput" value={String(form.sortOrder??0)} onChange={e=>setForm(f=>({...f,sortOrder:Number(e.target.value||0)}))}/></div>}
+        {cfg.hasIsActive&&<div><label className="fLabel">Active</label><div className={`tgl ${form.isActive!==false?"on":""}`} onClick={()=>setForm(f=>({...f,isActive:f.isActive===false}))}><span className="tglTrack"><span className="tglThumb"/></span>{form.isActive!==false?"Yes":"No"}</div></div>}
+      </div></div>
+      <div className="panelFoot"><div className="buttonRow"><button className="fBtn fBtnP" onClick={save}>Save</button><button className="fBtn" onClick={()=>setPanel(null)}>Cancel</button></div></div>
+    </div></>}
+    {del&&<><div className="overlay" onClick={()=>setDel(null)}/><div className="dlg" role="alertdialog">
+      <div className="dlgTitle">Delete item</div>
+      <div className="dlgMsg">Delete "{del.title}"? This can't be undone. If it's used by existing requests, consider deactivating it instead.</div>
+      <div className="buttonRow" style={{justifyContent:"flex-end"}}><button className="fBtn fBtnP" onClick={doDelete}>Delete</button><button className="fBtn" onClick={()=>setDel(null)}>Cancel</button></div>
+    </div></>}
+  </section>;
+}
+
+// ─────────────────────────── APP SHELL ───────────────────────────
+function App(){
+  const [userId,setUserId]=useState("u1");
+  const user=userById(userId);
+  const [records,setRecords]=useState(SEED);
+  const [masters,setMasters]=useState(SEED_MASTERS);
+  const [view,setView]=useState("dashboard");
+  const [selId,setSelId]=useState();
+  const [toast,setToast]=useState();
+  const [picker,setPicker]=useState(false);const pickRef=useRef(null);
+  const mobile=useIsMobile();const [navOpen,setNavOpen]=useState(false);
+  const seq=useRef(151);
+  useEffect(()=>{if(!toast)return;const t=setTimeout(()=>setToast(undefined),3500);return()=>clearTimeout(t);},[toast]);
+  useEffect(()=>{const h=e=>{if(pickRef.current&&!pickRef.current.contains(e.target))setPicker(false);};document.addEventListener("mousedown",h);return()=>document.removeEventListener("mousedown",h);},[]);
+  const showToast=(message,kind="success")=>setToast({message,kind});
+  const role=user.role;
+
+  // Visibility: technician → own requests; manager/supervisor → their branches; admin → all.
+  const visible=useMemo(()=>records.filter(r=>role==="technician"?r.createdByTechnicianId===user.id:role==="admin"?true:user.branches.includes(r.branch)),[records,user,role]);
+  const notifications=useMemo(()=>deriveNotifications(visible,user),[visible,user]);
+  const sel=records.find(r=>r.id===selId);
+
+  const go=v=>{setView(v);if(!["detail","edit","fill"].includes(v))setSelId(undefined);if(mobile)setNavOpen(false);};
+  const open=id=>{setSelId(id);setView("detail");};
+  const switchUser=u=>{setUserId(u.id);setPicker(false);setView("dashboard");setSelId(undefined);};
+  const actor={id:user.id,name:user.name,role};
+  const touch=(r,status,events,extra={})=>{const now=nowISO();return {...r,...extra,status,modified:now,...(status!==r.status?{stageEnteredAt:now,dueDate:addDays(now,SLA_DAYS)}:{}),timeline:[...r.timeline,...events.map(e=>({...e,id:++EVT_ID.current}))]};};
+  const EVT_ID=useRef(1000);
+
+  const submitNew=f=>{
+    const n=seq.current++;const now=nowISO();const sup=hasSupervisor(f.branch);const status=initialStatus(f.requestType,sup);const p=AD.find(x=>x.id===f.requestorId);
+    const capture=f.requestType==="replace"||!sup;
+    const note=sup?(f.requestType==="replace"?"Replacement — asset details captured up front, skips Manager":""):TP_NOTE;
+    const r={id:n,requestId:`REQ-2026-${n}`,ticketNumber:f.ticketNumber.trim(),requestType:f.requestType,branch:f.branch,departmentLabel:p.dept,newLocation:p.dept,requestorId:p.id,requestorNameLabel:p.name,requestorEmail:p.email,technicianId:user.id,technicianNameLabel:user.name,createdByTechnicianId:user.id,status,reason:f.reason.trim(),requestDate:now,modified:now,stageEnteredAt:now,dueDate:addDays(now,SLA_DAYS),assignmentDate:capture?now:"",deliveredAt:"",confirmedAt:"",reminderRequestedAt:"",
+      assets:f.assets.map((a,i)=>({...a,id:i+1,model:capture?a.model.trim():"",serialNumber:capture?a.serialNumber.trim():"",rfidAssetId:capture?a.rfidAssetId.trim():""})),
+      timeline:[{...ev("created",actor,now,f.ticketNumber.trim()),id:++EVT_ID.current},{...ev(status==="pending_manager"?"submitted_manager":"submitted_supervisor_review",actor,now,note),id:++EVT_ID.current}]};
+    setRecords(p=>[r,...p]);go("dashboard");
+    showToast(`Request ${r.requestId} submitted as ${typeLabel(f.requestType)}.`);
+  };
+  const saveEdit=f=>{
+    const now=nowISO();const sup=hasSupervisor(f.branch);const status=initialStatus(f.requestType,sup);const p=AD.find(x=>x.id===f.requestorId);const capture=f.requestType==="replace"||!sup;
+    setRecords(rs=>rs.map(r=>r.id!==sel.id?r:touch(r,status,[ev("change_request",actor,now,"Details updated — approval path restarted"),ev(status==="pending_manager"?"submitted_manager":"submitted_supervisor_review",actor,now,sup?(f.requestType==="replace"?"Replacement skips Manager":""):TP_NOTE)],
+      {ticketNumber:f.ticketNumber.trim(),requestType:f.requestType,branch:f.branch,departmentLabel:p.dept,newLocation:p.dept,requestorId:p.id,requestorNameLabel:p.name,requestorEmail:p.email,reason:f.reason.trim(),assignmentDate:capture?now:"",assets:f.assets.map((a,i)=>({...a,id:i+1,model:capture?a.model:"",serialNumber:capture?a.serialNumber:"",rfidAssetId:capture?a.rfidAssetId:""}))})));
+    setView("detail");showToast(`Request ${sel.requestId} updated and approval path restarted.`);
+  };
+  const doAction=(action,comment)=>{
+    const r=sel;const sup=hasSupervisor(r.branch);
+    try{
+      if((action==="manager_reject"||action==="supervisor_reject")&&!(comment||"").trim())throw new Error("Reject action requires a comment.");
+      const status=nextStatus(r.status,action,r.requestType,sup);const now=nowISO();
+      let note=(comment||"").trim(),a=actor,extra={};
+      if(action==="manager_approve"&&!note)note=status==="pending_delivery"?"Approved — ready for delivery":"Return to technician for asset details";
+      if(action==="mark_delivered")extra={deliveredAt:now};
+      if(action==="requestor_confirm"){a={name:r.requestorNameLabel};note="Receipt confirmed from email";extra={confirmedAt:now};}
+      setRecords(rs=>rs.map(x=>x.id!==r.id?x:touch(x,status,[ev(action,a,now,note)],extra)));
+      showToast(`Request ${r.requestId} updated: ${ACTION_LABEL[action]}.`,action.indexOf("reject")>=0||action==="cancel"?"error":"success");
+      if(action==="requestor_confirm")setView("detail");else go("myRequests");
+    }catch(e){showToast(e.message,"error");}
+  };
+  const remind=()=>{
+    const r=sel;if(isToday(r.reminderRequestedAt))return showToast("A reminder has already been sent for this request today. The next one can be sent tomorrow.","error");
+    const w=WAITING_ON[r.status];const now=nowISO();
+    setRecords(rs=>rs.map(x=>x.id!==r.id?x:{...x,reminderRequestedAt:now,modified:now,timeline:[...x.timeline,{...ev("manual_reminder",actor,now,`Manual reminder sent to the ${w}.`),id:++EVT_ID.current}]}));
+    showToast(`Reminder sent to the ${w} for ${r.requestId}.`);
+  };
+  const fillSubmit=assets=>{
+    const r=sel;const now=nowISO();const status=nextStatus(r.status,"submit_details",r.requestType,hasSupervisor(r.branch));
+    setRecords(rs=>rs.map(x=>x.id!==r.id?x:touch(x,status,[ev("submit_details",actor,now,assets.map(a=>`${a.model.trim()} · ${a.serialNumber.trim()} · ${a.rfidAssetId.trim()}`).join("  |  ")),ev("submitted_supervisor_approval",actor,now)],{assets:assets.map(a=>({...a,model:a.model.trim(),serialNumber:a.serialNumber.trim(),rfidAssetId:a.rfidAssetId.trim()})),assignmentDate:now})));
+    setView("detail");showToast(`Asset details submitted for ${r.requestId}.`);
+  };
+
+  // ── DEMO: auto-approval engine. Each step is performed by the right person for that stage. ──
+  const autoStep=r=>{
+    const sup=hasSupervisor(r.branch),now=nowISO();
+    const as=u=>u?{id:u.id,name:u.name,role:u.role}:{name:"System"};
+    const mgr=USERS.find(u=>u.role==="manager"&&u.branches.includes(r.branch)),spv=USERS.find(u=>u.role==="supervisor"&&u.branches.includes(r.branch)),tech=userById(r.createdByTechnicianId)||{name:r.technicianNameLabel,role:"technician"};
+    const nx=a=>nextStatus(r.status,a,r.requestType,sup);
+    switch(r.status){
+      case "pending_manager":{const s=nx("manager_approve");return touch(r,s,[ev("manager_approve",as(mgr),now,s==="pending_delivery"?"Approved — ready for delivery":"Return to technician for asset details")]);}
+      case "pending_details":{const assets=r.assets.map(a=>({...a,model:a.model||demoModel(eqLabel(a,masters)),serialNumber:a.serialNumber||demoSerial(),rfidAssetId:a.rfidAssetId||demoRfid()}));
+        return touch(r,nx("submit_details"),[ev("submit_details",as(tech),now,assets.map(a=>`${a.model} · ${a.serialNumber} · ${a.rfidAssetId}`).join("  |  ")),ev("submitted_supervisor_approval",as(tech),now)],{assets,assignmentDate:now});}
+      case "pending_supervisor":return touch(r,nx("supervisor_approve"),[ev("supervisor_approve",as(spv),now,"")]);
+      case "pending_delivery":return touch(r,nx("mark_delivered"),[ev("mark_delivered",as(tech),now)],{deliveredAt:now});
+      case "pending_confirmation":return touch(r,nx("requestor_confirm"),[ev("requestor_confirm",{name:r.requestorNameLabel},now,"Receipt confirmed from email")],{confirmedAt:now});
+      case "rejected":return touch(r,initialStatus(r.requestType,sup),[ev("resubmit",as(tech),now,"")]);
+      default:return null;
+    }
+  };
+  const onRequestPage=["detail","edit","fill"].includes(view)&&sel;
+  const approvalTargets=onRequestPage?(["completed","cancelled"].includes(sel.status)?[]:[sel]):visible.filter(r=>IN_PROGRESS.includes(r.status));
+  const runApprovals=all=>{
+    if(!approvalTargets.length)return showToast("Nothing waiting for approval here.","error");
+    const ids=new Set(approvalTargets.map(r=>r.id));const moves=[];
+    const next=records.map(r=>{if(!ids.has(r.id))return r;let cur=r,n=0;
+      while(n<8){const nx=autoStep(cur);if(!nx)break;cur=nx;n++;if(!all||cur.status==="completed")break;}
+      moves.push({id:r.requestId,from:STATUS[r.status].label,to:STATUS[cur.status].label});return cur;});
+    setRecords(next);
+    if(view==="fill"||view==="edit")setView("detail");
+    if(moves.length===1)showToast(`${moves[0].id}: ${moves[0].from} → ${moves[0].to}`);else showToast(all?`${moves.length} requests approved through to Completed.`:`${moves.length} requests moved to their next step.`);
+  };
+  // ── DEMO: click an empty text box → fill it with a realistic value ──
+  useEffect(()=>{const h=e=>{const el=e.target;if(!(el instanceof HTMLInputElement||el instanceof HTMLTextAreaElement))return;
+      if(el.disabled||el.readOnly||el.value||el.closest(".filterSearch,.pp,.spSearch"))return;if(el instanceof HTMLInputElement&&!["text",""].includes(el.type))return;
+      const v=demoValueFor(el);if(v)setNativeValue(el,v);};
+    document.addEventListener("focusin",h);return()=>document.removeEventListener("focusin",h);},[]);
+  const autoFillPage=()=>{const evt=new CustomEvent("demo-autofill",{detail:{handled:false}});window.dispatchEvent(evt);
+    if(evt.detail.handled)showToast("Form auto-filled with demo data.");else showToast("No form on this page to fill.","error");};
+
+  const canCreate=role==="technician"||role==="supervisor";
+  const canSetup=role==="manager"||role==="supervisor"||role==="admin";
+  const nav=[
+    {key:"dashboard",label:"Dashboard",icon:<I.dash size={18}/>,show:true},
+    {key:"create",label:"Create Request",icon:<I.plus size={18}/>,show:canCreate},
+    {key:"myRequests",label:"My Requests",icon:<I.list size={18}/>,show:true},
+    {key:"setup",label:"Setup",icon:<I.gear size={18}/>,show:canSetup},
+    {key:"notifications",label:"Notifications",icon:<I.bell size={18}/>,show:true,badge:notifications.length},
+  ];
+  const avatarBg={manager:T.info,supervisor:T.purple,admin:T.primary,technician:T.teal}[role];
+
+  return <div className="shell">
+    {/* SharePoint page canvas (suite bar removed; user switcher lives in the app header) */}
+    <div className="spPage"><div className="spScroll">
+    <div className="appRoot">
+      <header><div className="subHeader" style={{justifyContent:"space-between"}}>
+        <div style={{display:"flex",alignItems:"center",gap:12,minWidth:0}}>
+          {mobile&&<button className="iconBtn" style={{border:0,color:T.primary}} title="Menu" aria-label="Open navigation" onClick={()=>setNavOpen(o=>!o)}><I.menu size={20}/></button>}
+          <img src={LOGO} alt="Innomick Technology" style={{height:mobile?30:34,width:"auto",maxWidth:mobile?124:220,objectFit:"contain",display:"block"}}/>
+          <div className="appTitle" style={{color:T.primary,fontSize:mobile?13:15,fontWeight:700}}>{mobile?"Innomick — ITAMS":"Innomick — IT Asset Transfer Management System"}</div>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:8}}>
+        {/* Demo user switcher (same style as ItemSure) */}
+        <div style={{position:"relative"}} ref={pickRef}>
+          <div onClick={()=>setPicker(p=>!p)} title="Switch user (demo only)" style={{display:"flex",alignItems:"center",gap:8,background:"#f8fafc",borderRadius:16,padding:"3px 10px 3px 3px",cursor:"pointer",border:`1px dashed ${T.border}`}}>
+            <div style={{width:26,height:26,borderRadius:"50%",background:avatarBg,display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:9,fontWeight:700}}>{initials(user.name)}</div>
+            {!mobile&&<div style={{lineHeight:1.2}}><div style={{color:T.text,fontSize:11,fontWeight:600}}>{user.name}</div><div style={{color:T.textMut,fontSize:9}}>Demo · {ROLE_TITLE[user.role]}</div></div>}
+            <span style={{color:T.textMut,fontSize:10}}>▾</span>
+          </div>
+        {picker&&<div className="pickerMenu">
+          <div style={{padding:"12px 16px",borderBottom:`1px solid ${T.border}`,background:"#f8fafc"}}><div style={{fontSize:12,fontWeight:700,color:T.text}}>Switch User (Demo)</div><div style={{fontSize:10,color:T.textSec,marginTop:2}}>View the system from each role's perspective. In production, roles come from SharePoint groups ITAsset-&lt;Role&gt;-&lt;Branch&gt;.</div></div>
+          {USERS.map(u=><div key={u.id} className="pickerItem" onClick={()=>switchUser(u)} style={{background:u.id===userId?T.primaryLight:undefined}}>
+            <div style={{width:32,height:32,borderRadius:"50%",background:`${T.primary}18`,color:T.primary,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700}}>{initials(u.name)}</div>
+            <div style={{flex:1}}><div style={{fontSize:13,fontWeight:u.id===userId?700:500,color:T.text}}>{u.name}</div><div style={{fontSize:11,color:T.textMut}}>{ROLE_TITLE[u.role]} · {u.branches.map(b=>branchLabel(b,masters)).join(", ")}</div></div>
+            {u.id===userId&&<span style={{color:T.ok,fontWeight:700}}>✓</span>}
+          </div>)}
+        </div>}
+        </div>
+        {/* DEMO: approval shortcuts (prototype only) */}
+        <Btn kind="ghost" onClick={()=>runApprovals(false)} disabled={!approvalTargets.length} title={onRequestPage?`Move ${sel.requestId} to its next step`:`Move all ${approvalTargets.length} open request(s) you can see to their next step`}><I.arrowR size={16}/> Next Approval</Btn>
+        <Btn kind="primary" onClick={()=>runApprovals(true)} disabled={!approvalTargets.length} title={onRequestPage?`Approve every remaining step of ${sel.requestId} until Completed`:`Approve all ${approvalTargets.length} open request(s) you can see until Completed`}><I.check size={16}/> All Approvals</Btn>
+        <button type="button" title="Notifications" onClick={()=>go("notifications")} className="bellButton" style={{color:T.primary,background:view==="notifications"?T.primaryLight:"transparent",borderColor:view==="notifications"?T.primary:T.border}}>
+          <I.bell size={18}/>{notifications.length>0&&<span className="bellBadge">{notifications.length>99?"99+":notifications.length}</span>}
+        </button>
+        </div>
+      </div></header>
+
+      {toast&&<div style={{position:"fixed",top:60,right:24,zIndex:99999,animation:"toastIn 0.25s ease-out"}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,background:"#fff",borderRadius:10,padding:"13px 18px",boxShadow:"0 10px 35px rgba(0,0,0,0.18)",borderLeft:`4px solid ${toast.kind==="error"?T.err:T.ok}`,minWidth:300,maxWidth:420}}>
+          <div style={{width:24,height:24,borderRadius:"50%",background:(toast.kind==="error"?T.err:T.ok)+"18",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,color:toast.kind==="error"?T.err:T.ok,fontWeight:700,fontSize:14}}>{toast.kind==="error"?"!":"✓"}</div>
+          <span style={{fontSize:13,color:T.text,fontWeight:500,flex:1}}>{toast.message}</span>
+          <span onClick={()=>setToast(undefined)} style={{cursor:"pointer",color:T.textMut,fontSize:16,lineHeight:1,paddingLeft:4}}>×</span>
+        </div></div>}
+
+      <div className="layout">
+        {(!mobile||navOpen)&&<aside className="sidebar">
+          <nav>{nav.filter(n=>n.show).map(n=>{const active=view===n.key||(["detail","edit","fill"].includes(view)&&n.key==="myRequests");
+            return <button key={n.key} className={`navItem ${active?"navItemActive":""}`} onClick={()=>go(n.key)}>
+              <span className="navIcon">{n.icon}</span><span className="navLabel">{n.label}</span>
+              {n.badge>0&&<span className="navBadge">{n.badge>99?"99+":n.badge}</span>}</button>;})}</nav>
+          <div className="sidebarFooter"><div className="sidebarFooterName">{user.name}</div><div className="sidebarFooterMeta">{ROLE_TITLE[role]}</div><div className="sidebarFooterMeta">{user.dept||user.email}</div></div>
+        </aside>}
+        <main className="main" key={view+(selId||"")+userId}>
+          {view==="dashboard"&&<Dashboard user={user} records={visible} masters={masters} onOpen={open} onCreate={()=>go("create")}/>}
+          {view==="create"&&canCreate&&<CreateRequest user={user} masters={masters} onCancel={()=>go("dashboard")} onSubmit={submitNew}/>}
+          {view==="myRequests"&&<MyRequests user={user} records={visible} masters={masters} onOpen={open}/>}
+          {view==="detail"&&sel&&<Detail rec={sel} user={user} masters={masters} onBack={()=>go("myRequests")} onAction={doAction} onRemind={remind} onEdit={()=>setView("edit")} onFill={()=>setView("fill")}/>}
+          {view==="edit"&&sel&&<CreateRequest user={user} masters={masters} existing={sel} onCancel={()=>setView("detail")} onSubmit={saveEdit}/>}
+          {view==="fill"&&sel&&<FillAssets rec={sel} masters={masters} onBack={()=>setView("detail")} onSubmit={fillSubmit}/>}
+          {view==="notifications"&&<Notifications notifications={notifications} userName={user.name} onOpen={open}/>}
+          {view==="setup"&&canSetup&&<Setup user={user} masters={masters} setMasters={setMasters} onToast={showToast}/>}
+        </main>
+      </div>
+    </div>
+    </div></div>
+    {/* DEMO: fill the whole form on the current page in one click */}
+    <button type="button" className="demoFab" onClick={autoFillPage} title="Fill every field of the form on this page with demo data"><I.clip size={16}/> Auto Fill</button>
+  </div>;
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script></body></html>
