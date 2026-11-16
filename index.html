@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Innomick Solutions Showcase</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<meta name="theme-color" content="#0f6b5c">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -140,6 +143,7 @@ footer .brand{display:flex;align-items:center;gap:14px}
 footer .chip{background:#fff;border-radius:8px;padding:5px 9px}
 footer .chip img{height:24px}
 footer a:hover{color:#fff}
+footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
 
 /* Drawer */
 .scrim{position:fixed;inset:0;background:rgba(4,35,31,.45);backdrop-filter:blur(2px);z-index:60;opacity:0;pointer-events:none;transition:.25s}
@@ -253,7 +257,7 @@ footer a:hover{color:#fff}
     <div class="rv">
       <span class="kicker"><b>Preview</b> Interactive enterprise solutions by Innomick Technology</span>
       <h1>Enterprise workflows,<br><em>ready to experience.</em></h1>
-      <p class="lead">Five working solutions across healthcare, supply chain, legal, IT and document governance. Every screen is clickable, every role is real, and every approval flows from start to finish.</p>
+      <p class="lead">Five proven enterprise solutions, successfully delivered across healthcare, supply chain, legal, IT and document governance. Explore an interactive demonstration of each, with role-based access and complete end-to-end approval workflows.</p>
       <div class="cta">
         <button class="btn btn-primary" data-tour><svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10.5-6.5z"/></svg>Start presentation</button>
         <a class="btn btn-outline" href="#solutions">Browse solutions</a>
@@ -274,10 +278,10 @@ footer a:hover{color:#fff}
 
 <div class="stats">
   <div class="wrap">
-    <div class="stat"><b>5</b><span>Solutions ready to demo</span></div>
-    <div class="stat"><b>5</b><span>Business domains covered</span></div>
-    <div class="stat"><b>40+</b><span>Workflow stages modelled</span></div>
-    <div class="stat"><b>25+</b><span>Roles you can switch between</span></div>
+    <div class="stat"><b>50+</b><span>Systems delivered</span></div>
+    <div class="stat"><b>7+</b><span>Years of systems in production</span></div>
+    <div class="stat"><b>500K+</b><span>Real users served</span></div>
+    <div class="stat"><b>2–6</b><span>Weeks typical delivery</span></div>
   </div>
 </div>
 
@@ -300,7 +304,7 @@ footer a:hover{color:#fff}
       <div>
         <div class="eyebrow">How we deliver</div>
         <h2>From requirement to running system</h2>
-        <p>You sign off on something you have actually used, not a static mock-up, so delivery starts with fewer surprises.</p>
+        <p>We turn unclear problems into working systems, delivered in weeks, not months. You sign off on something you have actually used, not a static mock-up.</p>
       </div>
     </div>
     <div class="steps rv">
@@ -314,8 +318,12 @@ footer a:hover{color:#fff}
 
 <footer>
   <div class="wrap">
-    <div class="brand"><span class="chip"><img src="assets/innomick-logo.png" alt="Innomick Technology"></span><span>© <span id="yr"></span> Innomick Technology · Solutions showcase for client review</span></div>
-    <a href="https://innomick.com" target="_blank" rel="noopener">innomick.com</a>
+    <div class="brand"><span class="chip"><img src="assets/innomick-logo.png" alt="Innomick Technology"></span><span>© <span id="yr"></span> Innomick Technology · Serving USA, India &amp; Middle East (GCC)</span></div>
+    <div class="flinks">
+      <a href="https://www.linkedin.com/company/innomick-technology-pvt-ltd/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://calendly.com/kapil-chawala/book-strategy-call-with-innomick" target="_blank" rel="noopener">Book a call</a>
+      <a href="https://www.innomick.com/" target="_blank" rel="noopener">innomick.com</a>
+    </div>
   </div>
 </footer>
 
@@ -404,7 +412,7 @@ const P=[
   flow:[["Create Request","New, transfer or exchange"],["Pending Manager","Line-manager approval"],["Pending Supervisor","IT Supervisor review"],["Pending Delivery","IT Service Desk"],["Pending Confirmation","Employee confirms receipt"],["Completed","Asset register updated"]],
   modules:["Dashboard","Create Request","My Requests","Setup","Notifications","Export"],
   roles:["IT Technician","IT Manager","IT Supervisor","Administrator"]},
- {id:"dms",n:"Innomick DMS",full:"Document Management System",domain:"Governance",url:"https://dms-prototype2.vercel.app/Home.aspx#/approval",live:true,
+ {id:"dms",n:"Innomick DMS",full:"Document Management System",domain:"Governance",url:"DMS_Prototype.html",img:"assets/dms.jpg",
   quote:"Every document secured, versioned and approved.",
   desc:"A SharePoint-based document hub with upload and approval workflows, version history, secure sharing, expiry tracking and a Copilot assistant.",
   problem:"Documents sat in scattered drives and inboxes, with no approval trail or access control. The DMS organises them by department, with governed workflows and permissions.",
@@ -443,10 +451,10 @@ function render(){
   <article class="card cta-card rv" data-i="cta">
     <div>
       <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v2M5.6 5.6 7 7M3 12h2M18.4 5.6 17 7M21 12h-2"/><path d="M9 18h6M10 21h4M12 8a4 4 0 0 0-2.5 7.1V16h5v-.9A4 4 0 0 0 12 8Z"/></svg></div>
-      <h3>Have a process that still runs on email and spreadsheets?</h3>
-      <p>Tell us about it. We can turn it into a working prototype your team can click through within weeks.</p>
+      <h3>Still managing critical processes through email and spreadsheets?</h3>
+      <p>Let's discuss your requirements. We have delivered these solutions to leading organisations and can design one tailored to your business.</p>
     </div>
-    <a class="btn" href="https://innomick.com" target="_blank" rel="noopener">Talk to Innomick
+    <a class="btn" href="https://calendly.com/kapil-chawala/book-strategy-call-with-innomick" target="_blank" rel="noopener">Book a strategy call
       <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
   </article>`;
   const ds=['All',...new Set(P.map(p=>p.domain))];
