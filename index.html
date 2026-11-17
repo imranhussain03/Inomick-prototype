@@ -31,7 +31,13 @@ svg.i{width:16px;height:16px;flex:none}
 .btn-primary:hover{background:var(--g700)}
 .btn-outline{background:#fff;border:1px solid var(--line-2);color:var(--ink)}
 .btn-outline:hover{border-color:var(--g300);background:var(--g50)}
-.btn-sm{height:36px;padding:0 14px;font-size:13.5px;border-radius:9px}
+.btn-sm{height:38px;padding:0 16px;font-size:13.5px;border-radius:999px}
+.btn-lg{height:50px;padding:0 26px;font-size:15px;border-radius:999px}
+.btn-primary{background:linear-gradient(180deg,var(--g600),var(--g700));box-shadow:0 1px 2px rgba(6,48,42,.18),0 6px 16px -6px rgba(15,107,92,.55)}
+.btn-primary:hover{background:var(--g700);box-shadow:0 1px 2px rgba(6,48,42,.2),0 10px 22px -8px rgba(15,107,92,.65)}
+.btn .arr{transition:transform .2s ease}
+.btn:hover .arr,.card:hover .thumb .play .arr{transform:translateX(3px)}
+.btn-outline.btn-lg{border-color:var(--line-2);color:var(--g700)}
 
 /* Header */
 .top{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
@@ -248,9 +254,7 @@ footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
       <a class="l" href="#solutions">Solutions</a>
       <a class="l" href="#approach">Approach</a>
       <a class="l" href="https://innomick.com" target="_blank" rel="noopener">innomick.com</a>
-      <button class="btn btn-primary btn-sm" data-tour>
-        <svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10.5-6.5z"/></svg>Start presentation
-      </button>
+      <a class="btn btn-primary btn-sm" href="https://calendly.com/kapil-chawala/book-strategy-call-with-innomick" target="_blank" rel="noopener">Schedule a consultation</a>
     </nav>
   </div>
 </header>
@@ -260,10 +264,10 @@ footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
     <div class="rv">
       <span class="kicker"><b>Portfolio</b> Interactive enterprise solutions by Innomick Technology</span>
       <h1>Enterprise workflows,<br><em>ready to experience.</em></h1>
-      <p class="lead">Five proven enterprise solutions, successfully delivered across healthcare, supply chain, legal, IT and document governance. Explore an interactive demonstration of each, with role-based access and complete end-to-end approval workflows.</p>
+      <p class="lead">Five proven enterprise solutions, successfully delivered across healthcare, supply chain, legal, IT and document governance. Experience each solution first-hand, with role-based access and complete end-to-end approval workflows.</p>
       <div class="cta">
-        <button class="btn btn-primary" data-tour><svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10.5-6.5z"/></svg>Start presentation</button>
-        <a class="btn btn-outline" href="#solutions">Browse solutions</a>
+        <button class="btn btn-primary btn-lg" data-tour>Explore our solutions<svg class="i arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <a class="btn btn-outline btn-lg" href="https://calendly.com/kapil-chawala/book-strategy-call-with-innomick" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>Schedule a consultation</a>
       </div>
       <div class="trust">
         <span><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Role-based access</span>
@@ -475,12 +479,12 @@ const P=[
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const tick='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
-const playI='<svg class="i" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10.5-6.5z"/></svg>';
+const playI='<svg class="i arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 
 function thumb(p,i){
   const media=p.img?`<img src="${p.img}" alt="${esc(p.n)} screenshot" loading="lazy">`
     :`<div class="live-frame"><iframe data-src="${p.url}" tabindex="-1" aria-hidden="true"></iframe></div>`;
-  return `<div class="thumb" data-launch="${i}"><div class="frame"><div class="chrome"><i></i><i></i><i></i></div>${media}</div><div class="play"><span>${playI}Open solution</span></div></div>`;
+  return `<div class="thumb" data-launch="${i}"><div class="frame"><div class="chrome"><i></i><i></i><i></i></div>${media}</div><div class="play"><span>View solution${playI}</span></div></div>`;
 }
 function render(){
   $('#grid').innerHTML=P.map((p,i)=>`
@@ -493,7 +497,7 @@ function render(){
       <p class="desc">${esc(p.desc)}</p>
       <ul>${p.hl.map(h=>`<li>${tick}<span>${esc(h)}</span></li>`).join('')}</ul>
       <div class="cfoot">
-        <button class="btn btn-primary btn-sm" data-launch="${i}">${playI}Launch <span class="kbd">${i+1}</span></button>
+        <button class="btn btn-primary btn-sm" data-launch="${i}">Explore solution${playI}</button>
         <button class="btn btn-outline btn-sm" data-details="${i}">Details</button>
       </div>
     </div>
@@ -555,7 +559,7 @@ $('#vHome').onclick=closeViewer;$('#vPrev').onclick=()=>launch(cur-1);$('#vNext'
 $('#vReload').onclick=()=>{if(cur>=0)launch(cur);};
 $('#vFull').onclick=()=>{document.fullscreenElement?document.exitFullscreen():$('#viewer').requestFullscreen?.();};
 $('#seg').addEventListener('click',e=>{const b=e.target.closest('button');if(b)launch(+b.dataset.tab);});
-document.querySelectorAll('[data-tour]').forEach(b=>b.onclick=()=>{launch(0);toast('Use ← → to navigate between solutions · Esc to return');});
+document.querySelectorAll('[data-tour]').forEach(b=>b.onclick=()=>launch(0));
 document.addEventListener('click',e=>{const l=e.target.closest('[data-launch]');if(l){launch(+l.dataset.launch);return;}
   const d=e.target.closest('[data-details]');if(d)openDrawer(+d.dataset.details);});
 document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select'))return;const on=cur>=0;
