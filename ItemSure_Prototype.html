@@ -17413,8 +17413,8 @@ const EVALS = [{
     type: "certificate"
   }]
 },
-// BATCH 6.2 DEMO: New-item Approved eval — demonstrates HIS linking flow
-// 3 samples: 1 already linked (shows linked state on cert), 1 pending link (shows the "🔗 Link to the HIS" button), 1 rejected (no link needed)
+// BATCH 6.2 DEMO: New-item Approved eval — demonstrates Innomick HIS linking flow
+// 3 samples: 1 already linked (shows linked state on cert), 1 pending link (shows the "🔗 Link to Innomick HIS" button), 1 rejected (no link needed)
 {
   id: "EVAL-2026-PC01",
   date: "2026-03-15",
@@ -17587,7 +17587,7 @@ const EVALS = [{
   }, {
     user: uf("u2"),
     role: "CSCM Officer",
-    comment: "Approved samples 1+2; sample 3 rejected. Link approved samples to the HIS.",
+    comment: "Approved samples 1+2; sample 3 rejected. Link approved samples to Innomick HIS.",
     date: "2026-04-01",
     type: "cscm"
   }],
@@ -17636,7 +17636,7 @@ const EVALS = [{
     type: "verdict"
   }, {
     date: "2026-04-02 10:15",
-    action: "🔗 Linked to the HIS: TEMP-2026-001 → 10103040100012 (sample 1) · screenshot: HIS_Setup_Roche_TypeA.png",
+    action: "🔗 Linked to Innomick HIS: TEMP-2026-001 → 10103040100012 (sample 1) · screenshot: HIS_Setup_Roche_TypeA.png",
     user: "Saira Bancy",
     role: "CSCM",
     type: "link"
@@ -19962,7 +19962,7 @@ const GUIDE_CONTENT = {
     icon: "🗂️",
     what: "Every evaluation in the system — search, filter, and open any one.",
     next: {
-      cscm: "Filter to ‘completed’ to find an item to re-evaluate or link to the HIS.",
+      cscm: "Filter to ‘completed’ to find an item to re-evaluate or link to Innomick HIS.",
       depthead: "",
       enduser: "",
       speciality: ""
@@ -20308,7 +20308,7 @@ const SIM_TOURS = {
       }
     }, {
       title: "Open any evaluation",
-      body: "Click any row to open its full detail — from here CSCM can also re-evaluate or link an approved item to the HIS.",
+      body: "Click any row to open its full detail — from here CSCM can also re-evaluate or link an approved item to Innomick HIS.",
       scene: {
         kind: "rows",
         side: "Evaluations",
@@ -20539,7 +20539,7 @@ const SIM_TOURS = {
       }
     }, {
       title: "Record the verdict",
-      body: "Submit to record the verdict. Approved changes can be linked to the HIS and the certificate is generated for you.",
+      body: "Submit to record the verdict. Approved changes can be linked to Innomick HIS and the certificate is generated for you.",
       scene: {
         kind: "action",
         button: "Submit Verdict",
@@ -20639,7 +20639,7 @@ const SIM_TOURS = {
       }
     }, {
       title: "Record the verdict",
-      body: "Submit to record the verdict. Approved items can be linked to the HIS and the certificate is generated for you.",
+      body: "Submit to record the verdict. Approved items can be linked to Innomick HIS and the certificate is generated for you.",
       scene: {
         kind: "action",
         button: "Submit Verdict",
@@ -25929,7 +25929,7 @@ function DataImport({
 //   - Bulk multi-select operations
 //   - Master data relationships (lookups across lists)
 //   - Usage counts ("Used in X items")
-//   - HIS sync clearly marked as future
+//   - Innomick HIS sync clearly marked as future
 // ═══════════════════════════════════════════════════════════════
 
 // Helper: count items by manufacturer (relationship)
@@ -27526,9 +27526,9 @@ function SetupHome({
     k: "items",
     icon: "\uD83D\uDCCB",
     title: "Items (SIC)",
-    extra: tag("FUTURE: HIS SYNC", "#2563eb", "#eff6ff"),
+    extra: tag("FUTURE: Innomick HIS SYNC", "#2563eb", "#eff6ff"),
     l1: "Item master (SIC)",
-    l2: "Will sync from the HIS ERP later"
+    l2: "Will sync from Innomick HIS ERP later"
   })), /*#__PURE__*/React.createElement("div", {
     style: groupHdr
   }, "\u2699\uFE0F System Configuration"), /*#__PURE__*/React.createElement("div", {
@@ -28109,7 +28109,7 @@ function SetupCategoryModal({
       color: T.textMut,
       marginTop: 4
     }
-  }, "Optional code, used for filtering and reports. Entered manually and editable so it can match HIS \u2014 leave blank to fill in later."))), /*#__PURE__*/React.createElement("div", {
+  }, "Optional code, used for filtering and reports. Entered manually and editable so it can match Innomick HIS \u2014 leave blank to fill in later."))), /*#__PURE__*/React.createElement("div", {
     style: {
       padding: "14px 24px 18px",
       borderTop: `1px solid ${T.border}`,
@@ -28642,7 +28642,7 @@ function SetupItemModal({
     value: f.code,
     onChange: e => u("code", e.target.value),
     placeholder: "e.g., 10202099900088"
-  }), H("System Item Code — entered manually and editable so it can match HIS."), E(errs.code, "SIC is required")), /*#__PURE__*/React.createElement("div", {
+  }), H("System Item Code — entered manually and editable so it can match Innomick HIS."), E(errs.code, "SIC is required")), /*#__PURE__*/React.createElement("div", {
     style: {
       marginBottom: 14
     }
@@ -28659,7 +28659,7 @@ function SetupItemModal({
     style: inp,
     value: f.cs,
     onChange: e => u("cs", e.target.value)
-  }, /*#__PURE__*/React.createElement("option", null, "None"), /*#__PURE__*/React.createElement("option", null, "Active")), H("Whether the item has an active HIS code.")), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("option", null, "None"), /*#__PURE__*/React.createElement("option", null, "Active")), H("Whether the item has an active Innomick HIS code.")), /*#__PURE__*/React.createElement("div", {
     style: {
       marginBottom: 14
     }
@@ -28767,7 +28767,7 @@ function SetupSimpleModal({
       n: "Supplier",
       ph: "e.g., Bader Sultan & Bros. Co.",
       cph: "e.g., 423",
-      hint: "Optional supplier code, entered manually and editable so it can match HIS — leave blank to fill in later."
+      hint: "Optional supplier code, entered manually and editable so it can match Innomick HIS — leave blank to fill in later."
     },
     "End-User Types": {
       n: "End-User Type",
@@ -29027,7 +29027,7 @@ function SetupSimpleModal({
   }, "Save"))));
 }
 
-// Items setup — with category relationship + future HIS sync clearly labeled
+// Items setup — with category relationship + future Innomick HIS sync clearly labeled
 function SetupItems({
   items,
   setItems,
@@ -29210,7 +29210,7 @@ function SetupItems({
       color: T.text,
       lineHeight: 1.5
     }
-  }, /*#__PURE__*/React.createElement("strong", null, "Future: HIS ERP Sync."), " Items are admin-managed here today; a future release will sync them automatically from the HIS. Bulk Excel import arrives in a later Setup sub-step. SIC codes are the primary key and must be unique."), /*#__PURE__*/React.createElement(SetupTabs, {
+  }, /*#__PURE__*/React.createElement("strong", null, "Future: Innomick HIS ERP Sync."), " Items are admin-managed here today; a future release will sync them automatically from Innomick HIS. Bulk Excel import arrives in a later Setup sub-step. SIC codes are the primary key and must be unique."), /*#__PURE__*/React.createElement(SetupTabs, {
     active: setupTab,
     onChange: setSetupTab,
     historyCount: MASTER_AUDIT_LOG.filter(a => a.entity === "Items").length
@@ -30202,7 +30202,7 @@ function InnomickItemEvaluation() {
     const draftIdToReplace = draftEv?.id || null;
     setDraftEv(null);
     // BATCH 6.2: Per-sample temp item code generation for new items
-    // Format: TEMP-YYYY-NNN. Used until HIS code is linked post-approval.
+    // Format: TEMP-YYYY-NNN. Used until Innomick HIS code is linked post-approval.
     const yr = new Date().getFullYear();
     let tempCounter = allEvals.flatMap(e => (e.samples || []).map(s => s.tempCode)).filter(Boolean).length + 1;
     const newEv = {
@@ -32491,7 +32491,7 @@ function NewEvalForm({
     return () => document.removeEventListener("mousedown", h);
   }, [showItemDropdown]);
 
-  // v6.3 (Q4): Derive items from the HIS-linked samples in completed evals so they're searchable as existing items
+  // v6.3 (Q4): Derive items from Innomick HIS-linked samples in completed evals so they're searchable as existing items
   const primeCareLinkedItems = React.useMemo(() => {
     const seen = new Set();
     const items = [];
@@ -32499,7 +32499,7 @@ function NewEvalForm({
       if (ev.status !== "completed") continue;
       for (const s of ev.samples || []) {
         if (s.primeCareLinked && s.primeCareCode && !seen.has(s.primeCareCode)) {
-          // Check if this HIS code is already in ITEMS master — if so skip (master wins)
+          // Check if this Innomick HIS code is already in ITEMS master — if so skip (master wins)
           if (ITEMS.find(it => it.code === s.primeCareCode)) continue;
           seen.add(s.primeCareCode);
           items.push({
@@ -33043,7 +33043,7 @@ function NewEvalForm({
       color: T.ok,
       fontWeight: 700
     }
-  }, "\uD83C\uDFE5 HIS")))))), liveResults.length === 0 && /*#__PURE__*/React.createElement("div", { style: { padding: "16px 12px", textAlign: "center" } }, /*#__PURE__*/React.createElement("p", { style: { fontSize: 13, color: T.textSec, margin: "0 0 10px" } }, "No existing items match \u201C", itemSearch, "\u201D. Continue with it as:"), /*#__PURE__*/React.createElement("div", { style: { display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" } }, /*#__PURE__*/React.createElement("button", { onClick: () => { setIsSubject(false); continueAsNew(); }, className: "uat-cnb", style: { padding: "8px 16px", borderRadius: 6, border: `1px solid ${T.primary}`, background: T.primaryLight, color: T.primary, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: T.font } }, "+ a new item"), /*#__PURE__*/React.createElement("button", { onClick: continueAsSubject, className: "uat-cnb", style: { padding: "8px 16px", borderRadius: 6, border: `1px solid ${T.primary}`, background: T.primaryLight, color: T.primary, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: T.font } }, "+ a subject"))), liveResults.length > 0 && /*#__PURE__*/React.createElement("div", {
+  }, "\uD83C\uDFE5 Innomick HIS")))))), liveResults.length === 0 && /*#__PURE__*/React.createElement("div", { style: { padding: "16px 12px", textAlign: "center" } }, /*#__PURE__*/React.createElement("p", { style: { fontSize: 13, color: T.textSec, margin: "0 0 10px" } }, "No existing items match \u201C", itemSearch, "\u201D. Continue with it as:"), /*#__PURE__*/React.createElement("div", { style: { display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" } }, /*#__PURE__*/React.createElement("button", { onClick: () => { setIsSubject(false); continueAsNew(); }, className: "uat-cnb", style: { padding: "8px 16px", borderRadius: 6, border: `1px solid ${T.primary}`, background: T.primaryLight, color: T.primary, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: T.font } }, "+ a new item"), /*#__PURE__*/React.createElement("button", { onClick: continueAsSubject, className: "uat-cnb", style: { padding: "8px 16px", borderRadius: 6, border: `1px solid ${T.primary}`, background: T.primaryLight, color: T.primary, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: T.font } }, "+ a subject"))), liveResults.length > 0 && /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       alignItems: "center",
@@ -37696,7 +37696,7 @@ function ReEvalModal({
 // ═══════════════════════════════════════════════════════════════
 // EVAL DETAIL (v4: delegation chain, forward/delegate actions)
 // ═══════════════════════════════════════════════════════════════
-// BATCH 6.2: HIS linking modal — CSCM enters real SIC code + screenshot proof
+// BATCH 6.2: Innomick HIS linking modal — CSCM enters real SIC code + screenshot proof
 function PrimeCareLinkModal({
   data,
   onClose,
@@ -37744,13 +37744,13 @@ function PrimeCareLinkModal({
       fontWeight: 700,
       color: "#7c3aed"
     }
-  }, "\uD83D\uDD17 Link to the HIS"), /*#__PURE__*/React.createElement("div", {
+  }, "\uD83D\uDD17 Link to Innomick HIS"), /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 11,
       color: T.textSec,
       marginTop: 4
     }
-  }, "Once linked, the temporary code is archived and the HIS code is used everywhere.")), /*#__PURE__*/React.createElement("div", {
+  }, "Once linked, the temporary code is archived and Innomick HIS code is used everywhere.")), /*#__PURE__*/React.createElement("div", {
     style: {
       padding: 20
     }
@@ -37794,7 +37794,7 @@ function PrimeCareLinkModal({
     }
   }, /*#__PURE__*/React.createElement("label", {
     style: lbl
-  }, "SELECT HIS ITEM *"), pick ? /*#__PURE__*/React.createElement("div", {
+  }, "SELECT Innomick HIS ITEM *"), pick ? /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       alignItems: "center",
@@ -37887,7 +37887,7 @@ function PrimeCareLinkModal({
     style: {
       color: "#7c3aed"
     }
-  }, data.tempCode), " will be archived for audit; the new HIS code becomes the active code.")), /*#__PURE__*/React.createElement("div", {
+  }, data.tempCode), " will be archived for audit; the new Innomick HIS code becomes the active code.")), /*#__PURE__*/React.createElement("div", {
     style: {
       padding: "12px 20px",
       borderTop: `1px solid ${T.border}`,
@@ -37977,7 +37977,7 @@ function EvalDetail({ onPatch, ev: rawEv,role,
       if (onReEvalConsumed) onReEvalConsumed();
     }
   }, [autoOpenReEval]);
-  const [primeCareLinkModal, setPrimeCareLinkModal] = useState(null); // BATCH 6.2: HIS linking modal state {sampleSl, sampleName, tempCode}
+  const [primeCareLinkModal, setPrimeCareLinkModal] = useState(null); // BATCH 6.2: Innomick HIS linking modal state {sampleSl, sampleName, tempCode}
   // v6.2 Issue 1 (STRICT confidentiality): CSCM cannot see EU/Speciality assessments during their cscm_review until they submit their CSCM scoring
   const cscmHasSubmitted = !!(ev.cscmScores || ev.cscmPerSample);
   const cscmShouldHide = role === "cscm" && ev.status === "cscm_review" && !cscmHasSubmitted;
@@ -38442,13 +38442,13 @@ function EvalDetail({ onPatch, ev: rawEv,role,
         fontWeight: 600,
         color: "#7c3aed"
       }
-    }, "\uD83C\uDFF7\uFE0F HIS: ", n, " pending") : /*#__PURE__*/React.createElement("span", {
+    }, "\uD83C\uDFF7\uFE0F Innomick HIS: ", n, " pending") : /*#__PURE__*/React.createElement("span", {
       style: {
         fontSize: 10,
         fontWeight: 600,
         color: T.ok
       }
-    }, "\uD83C\uDFE5 HIS: linked");
+    }, "\uD83C\uDFE5 Innomick HIS: linked");
   })()), STATUS_SUB[ev.status] && /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 11,
@@ -39201,7 +39201,7 @@ function EvalDetail({ onPatch, ev: rawEv,role,
           color: T.ok,
           fontWeight: 600
         }
-      }, "\uD83C\uDFE5 HIS: ", s.primeCareCode) : s.tempCode ? /*#__PURE__*/React.createElement("span", {
+      }, "\uD83C\uDFE5 Innomick HIS: ", s.primeCareCode) : s.tempCode ? /*#__PURE__*/React.createElement("span", {
         style: {
           fontSize: 10,
           padding: "2px 8px",
@@ -39212,7 +39212,7 @@ function EvalDetail({ onPatch, ev: rawEv,role,
           fontFamily: "Consolas,monospace",
           letterSpacing: 0.5
         },
-        title: "Temporary code \u2014 link to the HIS after approval"
+        title: "Temporary code \u2014 link to Innomick HIS after approval"
       }, "\uD83C\uDFF7\uFE0F ", s.tempCode) : null, s.tempCode && s.primeCareLinked && /*#__PURE__*/React.createElement("span", {
         style: {
           fontSize: 9,
@@ -39238,7 +39238,7 @@ function EvalDetail({ onPatch, ev: rawEv,role,
           fontSize: 10,
           color: "#78350f"
         }
-      }, "\u23F3 Awaiting HIS code link \u2014 create item in the HIS and link here"), /*#__PURE__*/React.createElement("button", {
+      }, "\u23F3 Awaiting Innomick HIS code link \u2014 create item in Innomick HIS and link here"), /*#__PURE__*/React.createElement("button", {
         onClick: () => setPrimeCareLinkModal({
           sampleSl: s.sl,
           sampleName: s.name,
@@ -39254,7 +39254,7 @@ function EvalDetail({ onPatch, ev: rawEv,role,
           fontWeight: 600,
           cursor: "pointer"
         }
-      }, "\uD83D\uDD17 Link to the HIS")));
+      }, "\uD83D\uDD17 Link to Innomick HIS")));
     });
   })()), ev.verdict && verdictBlock()), tab === "delegation" && (() => {
     const evs = routingEvents(ev);
@@ -40516,7 +40516,7 @@ function EvalDetail({ onPatch, ev: rawEv,role,
         style: {
           color: T.textMut
         }
-      }, "HIS Linking Status:"), " ", linked > 0 && /*#__PURE__*/React.createElement("strong", {
+      }, "Innomick HIS Linking Status:"), " ", linked > 0 && /*#__PURE__*/React.createElement("strong", {
         style: {
           color: T.ok
         }
@@ -41224,7 +41224,7 @@ function EvalDetail({ onPatch, ev: rawEv,role,
         style: {
           color: T.textMut
         }
-      }, "HIS SIC:"), " ", /*#__PURE__*/React.createElement("strong", {
+      }, "Innomick HIS SIC:"), " ", /*#__PURE__*/React.createElement("strong", {
         style: {
           color: T.ok,
           fontFamily: "monospace"
@@ -41258,7 +41258,7 @@ function EvalDetail({ onPatch, ev: rawEv,role,
           marginLeft: 8,
           fontStyle: "italic"
         }
-      }, "\xB7 awaiting HIS linkage")) : null))), /*#__PURE__*/React.createElement("div", {
+      }, "\xB7 awaiting Innomick HIS linkage")) : null))), /*#__PURE__*/React.createElement("div", {
         style: {
           textAlign: "left",
           padding: "14px 18px",
@@ -41951,12 +41951,12 @@ function EvalDetail({ onPatch, ev: rawEv,role,
       } : s);
       updated.timeline = [...ev.timeline, {
         date: new Date().toISOString().replace("T", " ").slice(0, 16),
-        action: `🔗 Linked to the HIS: ${primeCareLinkModal.tempCode} → ${primeCareCode} (sample ${primeCareLinkModal.sampleSl})${screenshot ? ` · screenshot: ${screenshot}` : ""} — item now searchable as existing in future evaluations`,
+        action: `🔗 Linked to Innomick HIS: ${primeCareLinkModal.tempCode} → ${primeCareCode} (sample ${primeCareLinkModal.sampleSl})${screenshot ? ` · screenshot: ${screenshot}` : ""} — item now searchable as existing in future evaluations`,
         user: me.name,
         role: "CSCM",
         type: "link"
       }];
-      onStatusChange(updated, updated.status, `HIS code ${primeCareCode} linked for sample ${primeCareLinkModal.sampleSl} — item now searchable as existing`);
+      onStatusChange(updated, updated.status, `Innomick HIS code ${primeCareCode} linked for sample ${primeCareLinkModal.sampleSl} — item now searchable as existing`);
       setPrimeCareLinkModal(null);
     }
   }));
@@ -44508,7 +44508,7 @@ const fixTenderPeople = e0 => {
 const TENDER_TEMPLATE_COLS = [{
   c: "SIC",
   req: false,
-  n: "Item code for existing items. Leave blank for a completely new item: a temporary code is given and linked to the HIS after approval."
+  n: "Item code for existing items. Leave blank for a completely new item: a temporary code is given and linked to Innomick HIS after approval."
 }, {
   c: "Item Name",
   req: true,
