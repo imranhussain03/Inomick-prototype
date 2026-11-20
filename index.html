@@ -264,7 +264,7 @@ footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
     <div class="rv">
       <span class="kicker"><b>Portfolio</b> Interactive enterprise solutions by Innomick Technology</span>
       <h1>Enterprise workflows,<br><em>ready to experience.</em></h1>
-      <p class="lead">Five proven enterprise solutions, successfully delivered across healthcare, supply chain, legal, IT and document governance. Experience each solution first-hand, with role-based access and complete end-to-end approval workflows.</p>
+      <p class="lead">Five proven enterprise solutions, successfully delivered across document governance, legal, healthcare, supply chain and IT. Experience each solution first-hand, with role-based access and complete end-to-end approval workflows.</p>
       <div class="cta">
         <button class="btn btn-primary btn-lg" data-tour>Explore our solutions<svg class="i arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         <a class="btn btn-outline btn-lg" href="https://calendly.com/kapil-chawala/book-strategy-call-with-innomick" target="_blank" rel="noopener"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>Schedule a consultation</a>
@@ -276,9 +276,9 @@ footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
       </div>
     </div>
     <div class="stack rv" aria-hidden="true">
-      <div class="shot s1"><div class="chrome"><i></i><i></i><i></i><span>Contract Management</span></div><img src="assets/cms.jpg" alt=""></div>
-      <div class="shot s2"><div class="chrome"><i></i><i></i><i></i><span>CliniPack</span></div><img src="assets/clinipack.jpg" alt=""></div>
-      <div class="shot s3"><div class="chrome"><i></i><i></i><i></i><span>ItemSure</span></div><img src="assets/itemsure.jpg" alt=""></div>
+      <div class="shot s1"><div class="chrome"><i></i><i></i><i></i><span>Document Management</span></div><img src="assets/dms.jpg" alt=""></div>
+      <div class="shot s2"><div class="chrome"><i></i><i></i><i></i><span>Contract Management</span></div><img src="assets/cms.jpg" alt=""></div>
+      <div class="shot s3"><div class="chrome"><i></i><i></i><i></i><span>CliniPack</span></div><img src="assets/clinipack.jpg" alt=""></div>
     </div>
   </div>
 </div>
@@ -388,6 +388,40 @@ footer .flinks{display:flex;gap:22px;flex-wrap:wrap}
 
 <script>
 const P=[
+ {id:"dms",n:"Innomick DMS",full:"Document Management System",domain:"Governance",url:"DMS_Prototype.html",img:"assets/dms.jpg",
+  quote:"Every document secured, versioned and approved.",
+  desc:"A SharePoint-based document hub with upload and approval workflows, version history, secure sharing, expiry tracking and a Copilot assistant.",
+  problem:"Documents were dispersed across drives and inboxes, with no approval trail or access control. The DMS organises them by department, with governed workflows and permissions.",
+  hl:["Configurable individual and group approvals","Versioning, secure sharing, expiry alerts","Built-in Copilot on Microsoft 365"],
+  caps:["Guided document upload with category, sub-category and metadata",
+   "Department and branch libraries, organised across the organisation",
+   "Individual and group approval workflows, with reusable workflow templates",
+   "Review decisions: approve, reject, request edits or return with comments",
+   "Version history with restore",
+   "File permissions (view or edit) and secure sharing",
+   "Expiring-document tracking and alerts",
+   "Favourites, shared files and recycle bin",
+   "Copilot AI assistant"],
+  flow:[["Upload Document","Guided upload with metadata"],["Select Workflow","Individual or group, or saved template"],["Approval Steps","Approve, Review & Comment or Executive Sign-off, each with a due date"],["Review & Decision","Approve, reject or request for change"],["Published","Versioned with access control"]],
+  modules:["Home","My Approvals","My Favorites","My Files","My Departments","My Organization","Shared Files","Categories","Expiring Files","Recycle Bin","Copilot"],
+  roles:["Intranet Admin","Department Member","Reviewer","Approver","Executive"]},
+ {id:"cms",n:"CMS",full:"Contract Management System",domain:"Legal & Procurement",url:"CMS.html",img:"assets/cms.jpg",
+  quote:"Contracts from request to renewal, under control.",
+  desc:"Manages the complete contract lifecycle, including request letters, template-based drafting, vendor management, multi-level approvals, amendments and renewals.",
+  problem:"Contracts were stored across disparate folders and renewals were frequently missed. CMS tracks every contract, vendor and approval, and flags anything expiring or delayed.",
+  hl:["Request letters and bilingual template drafting","Sequential or parallel approval chains","Expiry alerts, amendments, renewals and import"],
+  caps:["Contract request letters with budget status, procurement mode (competitive bidding or single source) and recommended vendor",
+   "Template-based drafting, including bilingual English and Arabic service, purchase, construction and supply contracts",
+   "Online draft editing with comments and version history",
+   "Sequential or parallel approval chains covering Department Head, Legal, Finance, Procurement, IT and CEO",
+   "Request-for-change cycle and a digital approval certificate",
+   "Change requests for amendments (with addendum numbers), extensions, renewals, cancellations and completion, all kept in the contract history",
+   "Notice-period and expiry alerts",
+   "Statistics on contract value, vendor concentration, activity trends and draft ageing",
+   "Excel contract import with validation and error reporting"],
+  flow:[["Contract Request","Request letter and vendor"],["Draft","Template-based, English / Arabic"],["Approval Chain","Sequential or parallel"],["Request for Change","Revise and resubmit"],["Signed & Executed","Legal signed contract"],["Amend / Extend / Renew / Close","Recorded in contract history"]],
+  modules:["Statistics","Requests","Contracts","Approvals","Templates","Contract Import","Notifications"],
+  roles:["Requester","Department Head","Legal","Finance","Procurement","CEO","Site Admin"]},
  {id:"clinipack",n:"CliniPack",full:"Clinical Package Costing & Pricing",domain:"Healthcare",url:"CliniPack.html",img:"assets/clinipack.jpg",
   quote:"Advance care. Understand cost. Price with confidence.",
   desc:"Converts a physician's request into an approved, costed and priced clinical package, with sequential sign-off from clinical, nursing and finance leadership.",
@@ -423,23 +457,6 @@ const P=[
   flow:[["Request Initiation","Raised by CSCM"],["Department Head Assignment","Evaluators assigned · SLA 1 day"],["Speciality Purview Check","Automatic routing"],["End-User Evaluation","Scored assessment · SLA 5 days"],["Specialist Review","Speciality / Bio-Med · SLA 3 days"],["Score Check","Automatic validation"],["Forms Returned","End user to CSCM"],["CSCM Consolidation","Scores consolidated · SLA 3 days"],["Final Verdict","Evaluation certificate issued · SLA 2 days"]],
   modules:["My Tasks","Dashboard","All Evaluations","New Evaluation","Tenders","Supplier Change","Supplier Performance","Sustainability","Data Import","Notifications","Setup"],
   roles:["CSCM","Department Head","Speciality Officer","End User (Evaluator)","Purchasing Officer","Administrator"]},
- {id:"cms",n:"CMS",full:"Contract Management System",domain:"Legal & Procurement",url:"CMS.html",img:"assets/cms.jpg",
-  quote:"Contracts from request to renewal, under control.",
-  desc:"Manages the complete contract lifecycle, including request letters, template-based drafting, vendor management, multi-level approvals, amendments and renewals.",
-  problem:"Contracts were stored across disparate folders and renewals were frequently missed. CMS tracks every contract, vendor and approval, and flags anything expiring or delayed.",
-  hl:["Request letters and bilingual template drafting","Sequential or parallel approval chains","Expiry alerts, amendments, renewals and import"],
-  caps:["Contract request letters with budget status, procurement mode (competitive bidding or single source) and recommended vendor",
-   "Template-based drafting, including bilingual English and Arabic service, purchase, construction and supply contracts",
-   "Online draft editing with comments and version history",
-   "Sequential or parallel approval chains covering Department Head, Legal, Finance, Procurement, IT and CEO",
-   "Request-for-change cycle and a digital approval certificate",
-   "Change requests for amendments (with addendum numbers), extensions, renewals, cancellations and completion, all kept in the contract history",
-   "Notice-period and expiry alerts",
-   "Statistics on contract value, vendor concentration, activity trends and draft ageing",
-   "Excel contract import with validation and error reporting"],
-  flow:[["Contract Request","Request letter and vendor"],["Draft","Template-based, English / Arabic"],["Approval Chain","Sequential or parallel"],["Request for Change","Revise and resubmit"],["Signed & Executed","Legal signed contract"],["Amend / Extend / Renew / Close","Recorded in contract history"]],
-  modules:["Statistics","Requests","Contracts","Approvals","Templates","Contract Import","Notifications"],
-  roles:["Requester","Department Head","Legal","Finance","Procurement","CEO","Site Admin"]},
  {id:"itams",n:"ITAMS",full:"IT Asset Transfer Management",domain:"IT Operations",url:"Innomick_ITAMS_v5.html",img:"assets/itams.jpg",
   quote:"Every device, every transfer, fully accounted for.",
   desc:"Governs IT asset requests, transfers and replacements across branches, with every manager, supervisor and delivery step fully tracked.",
@@ -456,24 +473,7 @@ const P=[
    "Setup of branches, departments and equipment types"],
   flow:[["Create Request","Raised by IT Technician"],["Pending Manager","IT Manager approval · SLA 2 days"],["Pending Details","Model, serial and RFID · SLA 2 days"],["Pending Supervisor","IT Supervisor approval · SLA 2 days"],["Pending Delivery","IT Service Desk · SLA 2 days"],["Pending Confirmation","Employee confirms receipt · SLA 2 days"],["Completed","Asset register updated"]],
   modules:["Dashboard","Create Request","My Requests","Setup","Notifications","Export"],
-  roles:["IT Technician","IT Manager","IT Supervisor","Administrator","Requestor"]},
- {id:"dms",n:"Innomick DMS",full:"Document Management System",domain:"Governance",url:"DMS_Prototype.html",img:"assets/dms.jpg",
-  quote:"Every document secured, versioned and approved.",
-  desc:"A SharePoint-based document hub with upload and approval workflows, version history, secure sharing, expiry tracking and a Copilot assistant.",
-  problem:"Documents were dispersed across drives and inboxes, with no approval trail or access control. The DMS organises them by department, with governed workflows and permissions.",
-  hl:["Configurable individual and group approvals","Versioning, secure sharing, expiry alerts","Built-in Copilot on Microsoft 365"],
-  caps:["Guided document upload with category, sub-category and metadata",
-   "Department and branch libraries, organised across the organisation",
-   "Individual and group approval workflows, with reusable workflow templates",
-   "Review decisions: approve, reject, request edits or return with comments",
-   "Version history with restore",
-   "File permissions (view or edit) and secure sharing",
-   "Expiring-document tracking and alerts",
-   "Favourites, shared files and recycle bin",
-   "Copilot AI assistant"],
-  flow:[["Upload Document","Guided upload with metadata"],["Select Workflow","Individual or group, or saved template"],["Approval Steps","Approve, Review & Comment or Executive Sign-off, each with a due date"],["Review & Decision","Approve, reject or request for change"],["Published","Versioned with access control"]],
-  modules:["Home","My Approvals","My Favorites","My Files","My Departments","My Organization","Shared Files","Categories","Expiring Files","Recycle Bin","Copilot"],
-  roles:["Intranet Admin","Department Member","Reviewer","Approver","Executive"]}
+  roles:["IT Technician","IT Manager","IT Supervisor","Administrator","Requestor"]}
 ];
 
 const $=s=>document.querySelector(s);
