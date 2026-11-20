@@ -5675,7 +5675,7 @@ select.sp-form-input.is-readonly {
 .m365-side-panel,.m365-profile-flyout{top:56px!important}
 .m365-profile-flyout{max-height:calc(100vh - 66px)!important}
 .profile-flyout-header{padding:10px 16px!important}
-.profile-flyout-main{display:grid!important;grid-template-columns:44px minmax(0,1fr);column-gap:12px;align-items:center;text-align:left!important;padding:14px 16px 12px!important}
+.profile-flyout-main{display:grid!important;grid-template-columns:44px minmax(0,1fr);column-gap:12px;align-items:center;text-align:left!important;padding:16px!important}
 .profile-avatar-large{width:44px!important;height:44px!important;font-size:16px!important;margin:0!important;grid-row:1/3;box-shadow:none!important}
 .profile-user-name{font-size:14px!important;line-height:1.3;margin:0!important;align-self:end;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .profile-user-email{font-size:12px!important;margin:0!important;align-self:start;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -7342,10 +7342,6 @@ select.sp-form-input.is-readonly {
 
   <!-- 6. Microsoft 365 Profile Flyout (Screenshot 5) -->
   <div id="m365ProfileFlyout" class="m365-profile-flyout" style="display: none;" onclick="event.stopPropagation()">
-    <div class="profile-flyout-header">
-      <span class="profile-org-name" id="profileOrgName">Innomick Technologies</span>
-      <a href="#" class="profile-signout-link" onclick="handleProfileSignOut(event)">Sign out</a>
-    </div>
 
     <div class="profile-flyout-main">
       <div class="profile-avatar-large" id="profileAvatarLarge">
@@ -7354,10 +7350,6 @@ select.sp-form-input.is-readonly {
       <div class="profile-user-name" id="profileUserName">Intranet Admin</div>
       <div class="profile-user-email" id="profileUserEmail">admin@innomick.com</div>
 
-      <div class="profile-links-row">
-        <a href="#" class="profile-action-link" onclick="showToast('Opening Microsoft 365 Account settings...'); return false;">View account</a>
-        <a href="#" class="profile-action-link" onclick="showToast('Opening Microsoft 365 Profile...'); return false;">My Microsoft 365 profile</a>
-      </div>
     </div>
 
     <!-- Switch User (Demo) Section Grouped by Role (Matching ProjectHub feature) -->
@@ -22774,14 +22766,15 @@ function renderProfilePersonaList() {
     groups[groupName].forEach(p => {
       const isSelected = p.id === currentId;
       html += `
-        <div onclick="switchUserPersona('${p.id}')" style="display: flex; align-items: center; justify-content: space-between; padding: 7px 10px; border-radius: 4px; cursor: pointer; transition: background 0.15s; background: ${isSelected ? '#f0fdfa' : '#ffffff'}; margin-bottom: 4px; border: 1px solid ${isSelected ? '#99f6e4' : '#e2e8f0'};" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='${isSelected ? '#f0fdfa' : '#ffffff'}'">
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <div style="width: 28px; height: 28px; border-radius: 50%; background: ${isSelected ? '#008272' : '#64748b'}; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 11px;">
+        <div onclick="switchUserPersona('${p.id}')" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 8px; cursor: pointer; transition: background 0.15s; background: ${isSelected ? '#f0fdfa' : '#ffffff'}; margin-bottom: 4px; border: 1px solid ${isSelected ? '#99f6e4' : '#e2e8f0'};" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='${isSelected ? '#f0fdfa' : '#ffffff'}'">
+          <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
+            <div style="width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%; background: ${isSelected ? '#008272' : '#64748b'}; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 11px;">
               ${p.avatar}
             </div>
-            <div>
-              <strong style="display: block; font-size: 12px; color: #1e293b;">${p.name}</strong>
-              <span style="font-size: 10.5px; color: #64748b;">${p.department} &bull; <em style="color: #008272;">${p.role}</em></span>
+            <div style="min-width: 0;" title="${p.role} · ${p.department}">
+              <strong style="display: block; font-size: 12.5px; color: #1e293b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.name}</strong>
+              <span style="display: block; font-size: 11px; color: #008272; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.role}</span>
+              <span style="display: block; font-size: 10.5px; color: #94a3b8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${p.department}</span>
             </div>
           </div>
           ${isSelected ? '<span style="color: #008272; font-weight: bold; font-size: 13px;">✓</span>' : ''}
