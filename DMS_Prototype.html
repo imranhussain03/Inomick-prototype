@@ -4365,7 +4365,7 @@ select.sp-form-input.is-readonly {
   color: #7f1d1d;
 }
 
-.dept-pill-sahh {
+.dept-pill-cr {
   background: #e2e8f0;
   color: #334155;
 }
@@ -5563,7 +5563,7 @@ select.sp-form-input.is-readonly {
 
 .dept-pill-med { background: #f08080 !important; }
 .dept-pill-it { background: #90ee90 !important; }
-.dept-pill-sahh { background: #d3d3d3 !important; }
+.dept-pill-cr { background: #d3d3d3 !important; }
 .dept-pill-default { background: #d3d3d3 !important; }
 
 /* Popups (Create Workflow, Upload, Remarks) */
@@ -10924,7 +10924,7 @@ const InnomickData = {
       category: "Compliance Checklists",
       subCategory: "Client Governance",
       department: "Executive Director Office",
-      referenceNumber: "INM-SASH-201",
+      referenceNumber: "INM-DEL-201",
       favorite: false,
       stakeHolder: "Sayed Asif Ahmed",
       owner: "Sayed Asif Ahmed",
@@ -10944,7 +10944,7 @@ const InnomickData = {
       category: "Branding Guidelines",
       subCategory: "Executive Briefings",
       department: "Executive Director Office",
-      referenceNumber: "INM-SASH-202",
+      referenceNumber: "INM-DEL-202",
       favorite: true,
       stakeHolder: "Sayed Asif Ahmed",
       owner: "Sayed Asif Ahmed",
@@ -10964,7 +10964,7 @@ const InnomickData = {
       category: "Financial Reports",
       subCategory: "Budget Management",
       department: "Executive Director Office",
-      referenceNumber: "INM-SASH-203",
+      referenceNumber: "INM-DEL-203",
       favorite: false,
       stakeHolder: "Sayed Asif Ahmed",
       owner: "Sayed Asif Ahmed",
@@ -15644,8 +15644,8 @@ const InnomickData = {
 
 
 // Aliases for hospital sites and department names
-InnomickData.departmentSites["Al-Salam Al-Ahmadi Hospital"] = InnomickData.departmentSites["Innomick Hyderabad"];
-InnomickData.departmentSites["Al-Salam Al-Assima Hospital"] = InnomickData.departmentSites["Innomick Delhi"];
+InnomickData.departmentSites["Innomick Hyderabad Hospital"] = InnomickData.departmentSites["Innomick Hyderabad"];
+InnomickData.departmentSites["Innomick Delhi Hospital"] = InnomickData.departmentSites["Innomick Delhi"];
 InnomickData.departmentSites["Innomick Hyderabad"]["Hospital Director Office"] = InnomickData.departmentSites["Innomick Hyderabad"]["Executive Director Office"];
 InnomickData.departmentSites["Innomick Delhi"]["Hospital Director Office"] = InnomickData.departmentSites["Innomick Hyderabad"]["Executive Director Office"];
 
@@ -15796,7 +15796,7 @@ function persistWorkflowTemplates() {
 const APP_DATA_STORAGE_KEY = 'innomick_dms_data_v1';
 const APPROVAL_LISTS = ['approvalsInbox', 'approvalsOutbox', 'approvalsHistory', 'approvalsOutboxHistory'];
 // Alias entries point at another branch/department list; they are rebuilt, never stored twice
-const isAliasBranch = name => /^Al-Salam /.test(name);
+const isAliasBranch = name => / Hospital$/.test(name);
 const isAliasDept = name => name === 'Hospital Director Office';
 let appDataSaveTimer = null;
 
@@ -15854,7 +15854,7 @@ function restoreAppData() {
   const hyd = InnomickData.departmentSites['Innomick Hyderabad'];
   const del = InnomickData.departmentSites['Innomick Delhi'];
   aliasBranches.forEach(b => {
-    InnomickData.departmentSites[b] = /Ahmadi/.test(b) ? hyd : del;
+    InnomickData.departmentSites[b] = /Hyderabad/.test(b) ? hyd : del;
   });
   if (hyd && hyd['Executive Director Office']) {
     hyd['Hospital Director Office'] = hyd['Executive Director Office'];
@@ -17253,7 +17253,7 @@ function getDeptPillClass(dept) {
   const d = dept.toLowerCase();
   if (d.includes('information technology') || d.includes('it') || d.includes('executive director') || d.includes('director office')) return 'dept-pill-it';
   if (d.includes('finance & accounts')) return 'dept-pill-med';
-  if (d.includes('customer relations') || d.includes('sahh')) return 'dept-pill-sahh';
+  if (d.includes('customer relations')) return 'dept-pill-cr';
   return 'dept-pill-default';
 }
 
@@ -17912,9 +17912,9 @@ function publishApprovedDocumentToDepartment(item) {
   const dept = item.sourceDepartment || item.department || 'Executive Director Office';
   let branch = item.sourceBranch || AppState.activeBranch || 'Innomick Hyderabad';
   let canonicalBranch = branch;
-  if (branch.includes('Hyderabad') || branch.includes('Ahmadi')) {
+  if (branch.includes('Hyderabad')) {
     canonicalBranch = 'Innomick Hyderabad';
-  } else if (branch.includes('Delhi') || branch.includes('Assima')) {
+  } else if (branch.includes('Delhi')) {
     canonicalBranch = 'Innomick Delhi';
   }
 
@@ -17942,7 +17942,7 @@ function publishApprovedDocumentToDepartment(item) {
   });
 
   // Also ensure alias branches receive it
-  ['Innomick Hyderabad', 'Innomick Delhi', 'Al-Salam Al-Ahmadi Hospital', 'Al-Salam Al-Assima Hospital'].forEach(b => {
+  ['Innomick Hyderabad', 'Innomick Delhi', 'Innomick Hyderabad Hospital', 'Innomick Delhi Hospital'].forEach(b => {
     if (InnomickData.departmentSites[b]) {
       targetDepts.forEach(dKey => {
         if (InnomickData.departmentSites[b][dKey]) {
@@ -18946,13 +18946,13 @@ function renderDepartmentView() {
   let dept = AppState.activeDepartment || 'Information Technology';
   
   let canonicalBranch = branch;
-  if (branch.includes('Hyderabad') || branch.includes('Ahmadi')) {
+  if (branch.includes('Hyderabad')) {
     canonicalBranch = 'Innomick Hyderabad';
-  } else if (branch.includes('Delhi') || branch.includes('Assima')) {
+  } else if (branch.includes('Delhi')) {
     canonicalBranch = 'Innomick Delhi';
   }
 
-  const isHyderabad = canonicalBranch.includes('Hyderabad') || dept === 'Executive Director Office' || dept === 'Hospital Director Office' || branch.includes('Ahmadi');
+  const isHyderabad = canonicalBranch.includes('Hyderabad') || dept === 'Executive Director Office' || dept === 'Hospital Director Office';
   const isITDept = !isHyderabad && (dept.toLowerCase().includes('information') || dept.toLowerCase().includes('it') || dept.toLowerCase().includes('technology'));
 
   const displayTitle = `${canonicalBranch} - ${dept === 'Hospital Director Office' ? 'Executive Director Office' : dept}`;
@@ -21482,9 +21482,9 @@ function openDirectUploadFolderDrawer() {
 function getActiveDeptFolders() {
   let branch = AppState.activeBranch || 'Innomick Delhi';
   let canonicalBranch = branch;
-  if (branch.includes('Hyderabad') || branch.includes('Ahmadi')) {
+  if (branch.includes('Hyderabad')) {
     canonicalBranch = 'Innomick Hyderabad';
-  } else if (branch.includes('Delhi') || branch.includes('Assima')) {
+  } else if (branch.includes('Delhi')) {
     canonicalBranch = 'Innomick Delhi';
   }
   let dept = AppState.activeDepartment || 'Information Technology';
