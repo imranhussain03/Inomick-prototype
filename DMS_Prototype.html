@@ -5656,7 +5656,7 @@ select.sp-form-input.is-readonly {
 
 
 /* ==== Innomick unified app header (CliniPack style, SharePoint bar removed) ==== */
-.dms-app-header{height:56px!important;min-height:56px!important;padding:0 20px!important;background:#fff!important;border-bottom:1px solid #e2e8f0!important;box-shadow:0 1px 2px rgba(15,23,42,.04)!important;position:relative;z-index:100}
+.dms-app-header{height:56px!important;min-height:56px!important;padding:0 20px!important;background:#fff!important;border-bottom:1px solid #e2e8f0!important;box-shadow:0 1px 2px rgba(15,23,42,.04)!important;position:sticky!important;top:0!important;z-index:1000}
 .dms-app-header .innomick-brand-mark img{height:34px!important;width:auto!important;max-width:220px;object-fit:contain;display:block}
 .dms-app-header .dms-app-title{font-size:15px!important;font-weight:700!important;color:#007884!important;border:0!important;padding:0!important;margin:0!important;white-space:nowrap}
 .dms-app-header .app-header-right{display:flex;align-items:center;gap:6px}
@@ -5671,7 +5671,7 @@ select.sp-form-input.is-readonly {
 .dms-user-chip .duc-role{font-size:9.5px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dms-user-chip .duc-caret{font-size:10px;color:#64748b}
 .dms-layout-body{min-height:calc(100vh - 56px)!important}
-.dms-sidebar{height:calc(100vh - 56px)!important}
+.dms-sidebar{height:calc(100vh - 56px)!important;top:56px!important}
 .m365-side-panel,.m365-profile-flyout{top:56px!important}
 .m365-profile-flyout{max-height:calc(100vh - 66px)!important}
 @media (max-width:760px){.dms-app-header .dms-app-title{display:none}.dms-user-chip .duc-txt{display:none}}
