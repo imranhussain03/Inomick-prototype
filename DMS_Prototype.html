@@ -5674,6 +5674,14 @@ select.sp-form-input.is-readonly {
 .dms-sidebar{height:calc(100vh - 56px)!important;top:56px!important}
 .m365-side-panel,.m365-profile-flyout{top:56px!important}
 .m365-profile-flyout{max-height:calc(100vh - 66px)!important}
+/* Tabs: values read from the live DMS */
+.dms-content-area .secondary-tabs-bar .tabs-group{gap:8px!important}
+.dms-content-area[data-route^="home"] .secondary-tabs-bar:not(.approval-subtabs) .tab-pill{min-width:112px;justify-content:center;gap:6.4px!important;padding:8px 12.8px 8px 4.8px!important;white-space:nowrap}
+.dms-content-area .secondary-tabs-bar.approval-subtabs{padding:16px 8px!important;border-bottom:0.8px solid #cfcfcf!important}
+.dms-content-area .secondary-tabs-bar.approval-subtabs .tab-pill{min-width:96px;min-height:29px!important;justify-content:center;gap:6.4px!important;padding:4px!important;border-radius:5px!important;border-bottom:0!important;background:transparent!important;color:#323130!important;font-size:14px!important;font-weight:400!important;white-space:nowrap}
+.dms-content-area .secondary-tabs-bar.approval-subtabs .tab-pill.active{background:#cfcfcf!important;font-weight:600!important}
+.dms-content-area .secondary-tabs-bar.approval-subtabs .tab-pill:hover:not(.active){background:#f3f2f1!important}
+.dms-sidebar .nav-item.active{background:#cce4e6!important;color:#000!important}
 .profile-flyout-header{padding:10px 16px!important}
 .profile-flyout-main{display:grid!important;grid-template-columns:44px minmax(0,1fr);column-gap:12px;align-items:center;text-align:left!important;padding:16px!important}
 .profile-avatar-large{width:44px!important;height:44px!important;font-size:16px!important;margin:0!important;grid-row:1/3;box-shadow:none!important}
@@ -17153,7 +17161,7 @@ function renderMyApprovalsInner(activeTab) {
   const isTemplates = activeTab === 'templates';
 
   return `
-    <div class="secondary-tabs-bar" style="margin-bottom: 20px;">
+    <div class="secondary-tabs-bar approval-subtabs" style="margin-bottom: 20px;">
       <div class="tabs-group">
         <button class="tab-pill ${activeTab === 'inbox' ? 'active' : ''}" id="approvalTabInbox" onclick="switchApprovalTab('inbox')">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
